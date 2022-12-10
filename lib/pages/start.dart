@@ -20,7 +20,6 @@ class StartPage extends StatelessWidget {
             child: Text('Witaj w GB Shopping List',
                 style: TextStyle(
                   color: Theme.of(context).colorScheme.secondary,
-                  fontFamily: 'ProductSans',
                   fontWeight: FontWeight.bold,
                   fontSize: 28,
                 )),

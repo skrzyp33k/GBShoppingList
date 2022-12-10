@@ -36,7 +36,7 @@ class GBSLApp extends StatelessWidget {
       ),
       themeMode: ThemeMode.system,
       debugShowCheckedModeBanner: false,
-      home: const StartPage(),
+      home: const RegisterPage(),
     );
   }
 }
