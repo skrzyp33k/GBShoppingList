@@ -17,14 +17,14 @@ class GBSLApp extends StatelessWidget {
       title: 'GB Shopping List',
       theme: ThemeData(
         colorScheme: const ColorScheme.light().copyWith(
-            primary: GbPalette.GbYellow,
-            secondary: GbPalette.GbYellow,
+            primary: GbPalette.yellow,
+            secondary: GbPalette.yellow,
             tertiary: Colors.white),
       ),
       darkTheme: ThemeData.dark().copyWith(
         colorScheme: const ColorScheme.light().copyWith(
-            primary: GbPalette.GbYellow,
-            secondary: GbPalette.GbYellow,
+            primary: GbPalette.yellow,
+            secondary: GbPalette.yellow,
             tertiary: Colors.black),
       ),
       themeMode: ThemeMode.system,
