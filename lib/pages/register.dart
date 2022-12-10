@@ -109,7 +109,9 @@ class RegisterPage extends StatelessWidget {
                   child: RichText(
                     text: TextSpan(
                         text: 'Powrót',
-                        recognizer: TapGestureRecognizer()..onTap = () => {},
+                        recognizer: TapGestureRecognizer()..onTap = () {
+                          Navigator.pop(context);
+                        },
                         style: TextStyle(
                           color: Theme.of(context).colorScheme.primary,
                           decoration: TextDecoration.underline,

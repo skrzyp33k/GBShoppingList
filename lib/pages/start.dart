@@ -29,7 +29,9 @@ class StartPage extends StatelessWidget {
             margin:
                 const EdgeInsets.only(top: 10, bottom: 10, left: 25, right: 25),
             child: ElevatedButton.icon(
-              onPressed: () => {},
+              onPressed: () {
+                Navigator.pushNamed(context, '/login');
+              },
               icon: Icon(
                 Icons.login,
                 color: Theme.of(context).colorScheme.tertiary,
@@ -50,7 +52,9 @@ class StartPage extends StatelessWidget {
             margin:
                 const EdgeInsets.only(top: 10, bottom: 10, left: 25, right: 25),
             child: ElevatedButton.icon(
-              onPressed: () => {},
+              onPressed: () {
+                Navigator.pushNamed(context, '/register');
+              },
               icon: Icon(
                 Icons.app_registration,
                 color: Theme.of(context).colorScheme.tertiary,

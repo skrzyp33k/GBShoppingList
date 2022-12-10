@@ -72,7 +72,9 @@ class LoginPage extends StatelessWidget {
                   margin: const EdgeInsets.only(
                       top: 10, bottom: 25, left: 25, right: 25),
                   child: ElevatedButton.icon(
-                    onPressed: () => {},
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/home');
+                    },
                     icon: Icon(
                       Icons.login,
                       color: Theme.of(context).colorScheme.tertiary,
@@ -92,7 +94,9 @@ class LoginPage extends StatelessWidget {
                   child: RichText(
                     text: TextSpan(
                         text: 'Powrót',
-                        recognizer: TapGestureRecognizer()..onTap = () => {},
+                        recognizer: TapGestureRecognizer()..onTap = () {
+                          Navigator.pop(context);
+                        },
                         style: TextStyle(
                           color: Theme.of(context).colorScheme.primary,
                           decoration: TextDecoration.underline,

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'package:gb_shopping_list/loading.dart';
+
 import 'package:gb_shopping_list/pages/start.dart';
 import 'package:gb_shopping_list/pages/login.dart';
 import 'package:gb_shopping_list/pages/register.dart';
@@ -36,7 +38,14 @@ class GBSLApp extends StatelessWidget {
       ),
       themeMode: ThemeMode.system,
       debugShowCheckedModeBanner: false,
-      home: const RegisterPage(),
+      initialRoute: '/start',
+      routes:{
+        '/': (context) => Loading(),
+        '/start': (context) => StartPage(),
+        '/login': (context) => LoginPage(),
+        '/register': (context) => RegisterPage(),
+        '/home': (context) => HomePage(),
+      }
     );
   }
 }
