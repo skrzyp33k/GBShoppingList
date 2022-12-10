@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'gbslDrawer.dart';
+import 'package:gb_shopping_list/widgets/drawer.dart';
 
 class GBSLHomePage extends StatelessWidget {
   const GBSLHomePage({super.key});
@@ -18,7 +18,7 @@ class GBSLHomePage extends StatelessWidget {
         title: Text('GB Shopping List'),
         foregroundColor: Theme.of(context).colorScheme.tertiary,
       ),
-      drawer: GBSLDrawer(),
+      drawer: MenuDrawer(),
       body: Text('siema'),
     );
   }
