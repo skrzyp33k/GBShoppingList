@@ -1,0 +1,15 @@
+flutter_native_splash:
+  color: "#ffffff"
+  image: assets/icon.png
+  branding: assets/skrzyp33k_white.png
+  color_dark: "#121212"
+  image_dark: assets/icon.png
+  branding_dark: assets/skrzyp33k_black.png
+
+  android_12:
+    image: assets/icon.png
+    icon_background_color: "#ffffff"
+    image_dark: assets/icon.png
+    icon_background_color_dark: "#121212"
+
+  web: false
