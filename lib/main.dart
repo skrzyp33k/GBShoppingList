@@ -1,16 +1,22 @@
 import 'package:flutter/material.dart';
 
-import 'package:gb_shopping_list/loading.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
-import 'package:gb_shopping_list/pages/start.dart';
-import 'package:gb_shopping_list/pages/login.dart';
-import 'package:gb_shopping_list/pages/register.dart';
-import 'package:gb_shopping_list/pages/home.dart';
+import 'package:gb_shopping_list/pages/wrapper.dart';
+
+import 'package:gb_shopping_list/pages/auth/start.dart';
+import 'package:gb_shopping_list/pages/auth/login.dart';
+import 'package:gb_shopping_list/pages/auth/register.dart';
+import 'package:gb_shopping_list/pages/home/home.dart';
 
 import 'props/palette.dart';
 
 void main() {
   runApp(const GBSLApp());
+  Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
 }
 
 class GBSLApp extends StatelessWidget {
@@ -38,9 +44,9 @@ class GBSLApp extends StatelessWidget {
       ),
       themeMode: ThemeMode.system,
       debugShowCheckedModeBanner: false,
-      initialRoute: '/start',
+      initialRoute: '/',
       routes:{
-        '/': (context) => Loading(),
+        '/': (context) => Wrapper(),
         '/start': (context) => StartPage(),
         '/login': (context) => LoginPage(),
         '/register': (context) => RegisterPage(),
