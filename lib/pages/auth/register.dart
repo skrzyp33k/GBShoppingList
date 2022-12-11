@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/gestures.dart';
 
 import 'package:email_validator/email_validator.dart';
+
+import 'package:gb_shopping_list/services/auth.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({Key? key}) : super(key: key);
@@ -11,6 +12,8 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
+  final AuthService _auth = AuthService();
+
   final loginController = TextEditingController();
   final passwordController = TextEditingController();
   final repasswordController = TextEditingController();
@@ -112,7 +115,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       margin: const EdgeInsets.only(
                           top: 10, bottom: 10, left: 25, right: 25),
                       child: ElevatedButton.icon(
-                        onPressed: () {
+                        onPressed: () async {
                           String login = loginController.text;
                           String pass = passwordController.text;
                           String repass = repasswordController.text;
@@ -177,9 +180,30 @@ class _RegisterPageState extends State<RegisterPage> {
                             return;
                           }
 
-                          //TODO: attempt to register
+                          dynamic result = await _auth.registerEmail(
+                              email: login, password: pass);
 
-                          Navigator.pushNamed(context, '/home');
+                          if (result == null) //error
+                              {
+                            showDialog<String>(
+                              context: context,
+                              builder: (BuildContext context) => AlertDialog(
+                                title: Text('Błąd rejestracji!'),
+                                content: Text('Podczas rejestracji wystąpił błąd!'),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () =>
+                                        Navigator.pop(context, 'OK'),
+                                    child: const Text('OK'),
+                                  ),
+                                ],
+                              ),
+                            );
+                            loginController.text = "";
+                            passwordController.text = "";
+                          } else {
+                            Navigator.pushNamed(context, '/home');
+                          }
                         },
                         icon: Icon(
                           Icons.app_registration,

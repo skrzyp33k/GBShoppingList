@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/gestures.dart';
 
 import 'package:email_validator/email_validator.dart';
+
+import 'package:gb_shopping_list/services/auth.dart';
+
+import 'package:gb_shopping_list/models/user.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -11,6 +14,8 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  final AuthService _auth = AuthService();
+
   final loginController = TextEditingController();
   final passwordController = TextEditingController();
 
@@ -92,7 +97,7 @@ class _LoginPageState extends State<LoginPage> {
                       margin: const EdgeInsets.only(
                           top: 10, bottom: 25, left: 25, right: 25),
                       child: ElevatedButton.icon(
-                        onPressed: () {
+                        onPressed: () async {
                           String login = loginController.text;
                           String pass = passwordController.text;
 
@@ -136,9 +141,30 @@ class _LoginPageState extends State<LoginPage> {
                             return;
                           }
 
-                          //TODO: attempt to login
+                          UserModel? result = await _auth.signInEmail(
+                              email: login, password: pass);
 
-                          Navigator.pushNamed(context, '/home');
+                          if (result == null) //error
+                          {
+                            showDialog<String>(
+                              context: context,
+                              builder: (BuildContext context) => AlertDialog(
+                                title: Text('Błąd logowania!'),
+                                content: Text('Nieprawidłowe dane logowania!'),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () =>
+                                        Navigator.pop(context, 'OK'),
+                                    child: const Text('OK'),
+                                  ),
+                                ],
+                              ),
+                            );
+                            loginController.text = "";
+                            passwordController.text = "";
+                          } else {
+                            Navigator.pushNamed(context, '/home');
+                          }
                         },
                         icon: Icon(
                           Icons.login,

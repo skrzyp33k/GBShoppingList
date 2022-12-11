@@ -37,7 +37,7 @@ class _StartPageState extends State<StartPage> {
                   )),
             ),
             Container(
-              height: 50,
+              height: 75,
               margin: const EdgeInsets.only(
                   top: 10, bottom: 10, left: 25, right: 25),
               child: ElevatedButton.icon(
@@ -60,7 +60,7 @@ class _StartPageState extends State<StartPage> {
               ),
             ),
             Container(
-              height: 50,
+              height: 75,
               margin: const EdgeInsets.only(
                   top: 10, bottom: 10, left: 25, right: 25),
               child: ElevatedButton.icon(
@@ -76,59 +76,6 @@ class _StartPageState extends State<StartPage> {
                 ),
                 label: Center(
                   child: Text('Nie mam konta, zarejestruj się',
-                      style: TextStyle(
-                        color: Theme.of(context).colorScheme.tertiary,
-                      )),
-                ),
-              ),
-            ),
-            Container(
-              height: 50,
-              margin: const EdgeInsets.only(
-                  top: 10, bottom: 10, left: 25, right: 25),
-              child: ElevatedButton.icon(
-                icon: Icon(
-                  Icons.facebook,
-                  color: Theme.of(context).colorScheme.tertiary,
-                ),
-                onPressed: () => {},
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF4267B2),
-                  minimumSize: const Size.fromHeight(50),
-                ),
-                label: Center(
-                  child: Text('Zaloguj za pomocą Facebook',
-                      style: TextStyle(
-                        color: Theme.of(context).colorScheme.tertiary,
-                      )),
-                ),
-              ),
-            ),
-            Container(
-              height: 50,
-              margin: const EdgeInsets.only(
-                  top: 10, bottom: 10, left: 25, right: 25),
-              child: ElevatedButton.icon(
-                icon: SizedBox(
-                  height: 30,
-                  child: FittedBox(
-                    child: Text(
-                      'G',
-                      style: TextStyle(
-                        fontFamily: 'ProductSans',
-                        fontWeight: FontWeight.bold,
-                        color: Theme.of(context).colorScheme.tertiary,
-                      ),
-                    ),
-                  ),
-                ),
-                onPressed: () => {},
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFFDB4437),
-                  minimumSize: const Size.fromHeight(50),
-                ),
-                label: Center(
-                  child: Text('Zaloguj za pomocą Google',
                       style: TextStyle(
                         color: Theme.of(context).colorScheme.tertiary,
                       )),
