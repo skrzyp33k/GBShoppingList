@@ -52,6 +52,7 @@ class _MenuDrawerState extends State<MenuDrawer> {
                     IconButton(
                         onPressed: () async {
                           await _auth.signOut();
+                          Navigator.pushNamed(context, '/');
                         },
                         icon: Icon(
                           Icons.logout,
