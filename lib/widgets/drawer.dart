@@ -25,10 +25,9 @@ class _MenuDrawerState extends State<MenuDrawer> {
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisSize: MainAxisSize.max,
               children: <Widget>[
                 Container(
-                  padding: EdgeInsets.all(5),
+                  padding: EdgeInsets.all(15),
                   child: Text(
                     'Zalogowano jako:',
                     style: TextStyle(
@@ -38,48 +37,31 @@ class _MenuDrawerState extends State<MenuDrawer> {
                   ),
                 ),
                 Container(
-                  padding: EdgeInsets.all(10),
+                  padding: EdgeInsets.all(15),
                   child: Text(user?.email ?? "",
                       style: TextStyle(
                         color: Theme.of(context).colorScheme.tertiary,
                         fontSize: 14,
                       )),
                 ),
-                Container(
-                    child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    IconButton(
-                        onPressed: () async {
-                          await _auth.signOut();
-                          Navigator.pushNamed(context, '/');
-                        },
-                        icon: Icon(
-                          Icons.logout,
-                          color: Theme.of(context).colorScheme.tertiary,
-                        )),
-                    IconButton(
-                        onPressed: () {},
-                        icon: Icon(
-                          Icons.settings,
-                          color: Theme.of(context).colorScheme.tertiary,
-                        )),
-                  ],
-                )),
               ],
             ),
           ),
           ListTile(
-            leading: Icon(Icons.message),
-            title: Text('Messages'),
-          ),
-          ListTile(
-            leading: Icon(Icons.account_circle),
-            title: Text('Profile'),
-          ),
-          ListTile(
             leading: Icon(Icons.settings),
-            title: Text('Settings'),
+            title: Text('Ustawienia konta'),
+          ),
+          ListTile(
+            leading: Icon(Icons.info),
+            title: Text('O aplikacji'),
+          ),
+          ListTile(
+            leading: Icon(Icons.logout),
+            title: Text('Wyloguj się'),
+            onTap: () async {
+              await _auth.signOut();
+              Navigator.pushNamed(context, '/');
+            },
           ),
         ],
       ),

@@ -13,8 +13,6 @@ import 'package:gb_shopping_list/pages/auth/login.dart';
 import 'package:gb_shopping_list/pages/auth/register.dart';
 import 'package:gb_shopping_list/pages/home/home.dart';
 
-import 'package:provider/provider.dart';
-
 import 'props/palette.dart';
 
 void main() async {

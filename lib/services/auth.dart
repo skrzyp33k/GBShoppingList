@@ -11,7 +11,7 @@ class AuthService {
         ? UserModel(
             uid: user.uid,
             emailVerified: user.emailVerified,
-            email: user?.email)
+            email: user.email)
         : null;
   }
 
