@@ -13,7 +13,7 @@ class AccountSettings extends StatefulWidget {
 class _AccountSettingsState extends State<AccountSettings> {
   @override
   Widget build(BuildContext context) {
-    final AuthService _auth = AuthService();
+    final AuthService auth = AuthService();
     return WillPopScope(
       onWillPop: () async {
         MoveToBackground.moveTaskToBack();
@@ -21,10 +21,10 @@ class _AccountSettingsState extends State<AccountSettings> {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: Text('Ustawienia konta'),
+          title: const Text('Ustawienia konta'),
           foregroundColor: Theme.of(context).colorScheme.tertiary,
         ),
-        drawer: MenuDrawer(),
+        drawer: const MenuDrawer(),
         backgroundColor: Theme.of(context).colorScheme.background,
         body: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -36,8 +36,8 @@ class _AccountSettingsState extends State<AccountSettings> {
                   top: 10, bottom: 10, left: 25, right: 25),
               child: ElevatedButton.icon(
                 onPressed: () {
-                  String email = _auth.instance.currentUser!.email!;
-                  _auth.instance
+                  String email = auth.instance.currentUser!.email!;
+                  auth.instance
                       .sendPasswordResetEmail(email: email);
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                     content: Text("Wysłano e-mail na adres $email"),
@@ -67,8 +67,8 @@ class _AccountSettingsState extends State<AccountSettings> {
                   showDialog<bool>(
                     context: context,
                     builder: (BuildContext context) => AlertDialog(
-                      title: Text('Usuwanie konta!'),
-                      content: Text('Jesteś pewien?!'),
+                      title: const Text('Usuwanie konta!'),
+                      content: const Text('Jesteś pewien?!'),
                       actions: [
                         TextButton(
                           onPressed: () => Navigator.pop(context, true),
@@ -82,7 +82,7 @@ class _AccountSettingsState extends State<AccountSettings> {
                     ),
                   ).then((val) {
                     if (val!) {
-                      _auth.deleteUser();
+                      auth.deleteUser();
                       Navigator.pushNamed(context, '/');
                     }
                   });

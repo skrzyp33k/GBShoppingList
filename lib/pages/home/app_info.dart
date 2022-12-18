@@ -20,10 +20,10 @@ class _AppInfoState extends State<AppInfo> {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: Text('O aplikacji'),
+          title: const Text('O aplikacji'),
           foregroundColor: Theme.of(context).colorScheme.tertiary,
         ),
-        drawer: MenuDrawer(),
+        drawer: const MenuDrawer(),
         body: Center(
           child: Scaffold(
             backgroundColor: Theme.of(context).colorScheme.background,
@@ -32,11 +32,11 @@ class _AppInfoState extends State<AppInfo> {
                 Container(
                     width: 250,
                     height: 250,
-                    margin: EdgeInsets.only(top: 50),
-                    padding: EdgeInsets.all(25),
+                    margin: const EdgeInsets.only(top: 50),
+                    padding: const EdgeInsets.all(25),
                     child: Image.asset('assets/icon.png')),
                 Container(
-                  padding: EdgeInsets.all(25),
+                  padding: const EdgeInsets.all(25),
                   child: Text('Twoja najlepsza lista zakupów!',
                       style: TextStyle(
                         color: Theme.of(context).colorScheme.secondary,
@@ -45,7 +45,7 @@ class _AppInfoState extends State<AppInfo> {
                       )),
                 ),
                 Container(
-                  padding: EdgeInsets.all(25),
+                  padding: const EdgeInsets.all(25),
                   child: Text('Wersja: najlepsza',
                       style: TextStyle(
                         color: Theme.of(context).colorScheme.secondary,
@@ -54,7 +54,7 @@ class _AppInfoState extends State<AppInfo> {
                       )),
                 ),
                 Container(
-                  padding: EdgeInsets.all(25),
+                  padding: const EdgeInsets.all(25),
                   child: Text('© 2022',
                       style: TextStyle(
                         color: Theme.of(context).colorScheme.secondary,
@@ -62,13 +62,11 @@ class _AppInfoState extends State<AppInfo> {
                         fontSize: 16,
                       )),
                 ),
-                Container(
-                    child: Image.asset(
-                      SchedulerBinding.instance.window.platformBrightness == Brightness.dark
-                          ? 'assets/skrzyp33k_black.png'
-                          : 'assets/skrzyp33k_white.png',
-                      fit: BoxFit.cover,
-                    )
+                Image.asset(
+                  SchedulerBinding.instance.window.platformBrightness == Brightness.dark
+                      ? 'assets/skrzyp33k_black.png'
+                      : 'assets/skrzyp33k_white.png',
+                  fit: BoxFit.cover,
                 ),
               ],
             ),

@@ -16,15 +16,15 @@ class Wrapper extends StatelessWidget {
 
   if(user == null)
     {
-      return StartPage();
+      return const StartPage();
     }
   else if(user.emailVerified == false)
     {
-      return VerifyEmail();
+      return const VerifyEmail();
     }
   else
     {
-      return HomePage();
+      return const HomePage();
     }
   }
 }

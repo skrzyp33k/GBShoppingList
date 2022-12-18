@@ -24,11 +24,11 @@ class _StartPageState extends State<StartPage> {
             Container(
                 width: 250,
                 height: 250,
-                margin: EdgeInsets.only(top: 50),
-                padding: EdgeInsets.all(25),
+                margin: const EdgeInsets.only(top: 50),
+                padding: const EdgeInsets.all(25),
                 child: Image.asset('assets/icon.png')),
             Container(
-              padding: EdgeInsets.all(25),
+              padding: const EdgeInsets.all(25),
               child: Text('Witaj w GB Shopping List',
                   style: TextStyle(
                     color: Theme.of(context).colorScheme.secondary,

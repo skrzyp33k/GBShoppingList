@@ -60,17 +60,15 @@ class _RegisterPageState extends State<RegisterPage> {
                       height: 75,
                       margin: const EdgeInsets.only(
                           top: 10, bottom: 10, left: 25, right: 25),
-                      child: Container(
-                        child: TextField(
-                          controller: loginController,
-                          scrollPadding: EdgeInsets.only(
-                              bottom: MediaQuery.of(context).viewInsets.bottom),
-                          obscureText: false,
-                          enableSuggestions: false,
-                          autocorrect: false,
-                          decoration: const InputDecoration(
-                            labelText: 'Adres e-mail',
-                          ),
+                      child: TextField(
+                        controller: loginController,
+                        scrollPadding: EdgeInsets.only(
+                            bottom: MediaQuery.of(context).viewInsets.bottom),
+                        obscureText: false,
+                        enableSuggestions: false,
+                        autocorrect: false,
+                        decoration: const InputDecoration(
+                          labelText: 'Adres e-mail',
                         ),
                       ),
                     ),
@@ -78,17 +76,15 @@ class _RegisterPageState extends State<RegisterPage> {
                       height: 75,
                       margin: const EdgeInsets.only(
                           top: 10, bottom: 10, left: 25, right: 25),
-                      child: Container(
-                        child: TextField(
-                          controller: passwordController,
-                          scrollPadding: EdgeInsets.only(
-                              bottom: MediaQuery.of(context).viewInsets.bottom),
-                          obscureText: true,
-                          enableSuggestions: false,
-                          autocorrect: false,
-                          decoration: const InputDecoration(
-                            labelText: 'Hasło',
-                          ),
+                      child: TextField(
+                        controller: passwordController,
+                        scrollPadding: EdgeInsets.only(
+                            bottom: MediaQuery.of(context).viewInsets.bottom),
+                        obscureText: true,
+                        enableSuggestions: false,
+                        autocorrect: false,
+                        decoration: const InputDecoration(
+                          labelText: 'Hasło',
                         ),
                       ),
                     ),
@@ -96,17 +92,15 @@ class _RegisterPageState extends State<RegisterPage> {
                       height: 75,
                       margin: const EdgeInsets.only(
                           top: 10, bottom: 10, left: 25, right: 25),
-                      child: Container(
-                        child: TextField(
-                          controller: repasswordController,
-                          scrollPadding: EdgeInsets.only(
-                              bottom: MediaQuery.of(context).viewInsets.bottom),
-                          obscureText: true,
-                          enableSuggestions: false,
-                          autocorrect: false,
-                          decoration: const InputDecoration(
-                            labelText: 'Powtórz hasło',
-                          ),
+                      child: TextField(
+                        controller: repasswordController,
+                        scrollPadding: EdgeInsets.only(
+                            bottom: MediaQuery.of(context).viewInsets.bottom),
+                        obscureText: true,
+                        enableSuggestions: false,
+                        autocorrect: false,
+                        decoration: const InputDecoration(
+                          labelText: 'Powtórz hasło',
                         ),
                       ),
                     ),
@@ -124,9 +118,9 @@ class _RegisterPageState extends State<RegisterPage> {
                             showDialog<String>(
                               context: context,
                               builder: (BuildContext context) => AlertDialog(
-                                title: Text('Błąd rejestracji!'),
+                                title: const Text('Błąd rejestracji!'),
                                 content:
-                                    Text('Niewystarczające dane rejestracji!'),
+                                    const Text('Niewystarczające dane rejestracji!'),
                                 actions: [
                                   TextButton(
                                     onPressed: () =>
@@ -145,8 +139,8 @@ class _RegisterPageState extends State<RegisterPage> {
                             showDialog<String>(
                               context: context,
                               builder: (BuildContext context) => AlertDialog(
-                                title: Text('Błąd logowania!'),
-                                content: Text('Niepoprawny adres e-mail!'),
+                                title: const Text('Błąd logowania!'),
+                                content: const Text('Niepoprawny adres e-mail!'),
                                 actions: [
                                   TextButton(
                                     onPressed: () =>
@@ -164,8 +158,8 @@ class _RegisterPageState extends State<RegisterPage> {
                             showDialog<String>(
                               context: context,
                               builder: (BuildContext context) => AlertDialog(
-                                title: Text('Błąd rejestracji!'),
-                                content: Text('Hasła różnią się!'),
+                                title: const Text('Błąd rejestracji!'),
+                                content: const Text('Hasła różnią się!'),
                                 actions: [
                                   TextButton(
                                     onPressed: () =>
@@ -188,8 +182,8 @@ class _RegisterPageState extends State<RegisterPage> {
                             showDialog<String>(
                               context: context,
                               builder: (BuildContext context) => AlertDialog(
-                                title: Text('Błąd rejestracji!'),
-                                content: Text('Podczas rejestracji wystąpił błąd!'),
+                                title: const Text('Błąd rejestracji!'),
+                                content: const Text('Podczas rejestracji wystąpił błąd!'),
                                 actions: [
                                   TextButton(
                                     onPressed: () =>

@@ -60,17 +60,15 @@ class _LoginPageState extends State<LoginPage> {
                       height: 75,
                       margin: const EdgeInsets.only(
                           top: 10, bottom: 10, left: 25, right: 25),
-                      child: Container(
-                        child: TextField(
-                          controller: loginController,
-                          scrollPadding: EdgeInsets.only(
-                              bottom: MediaQuery.of(context).viewInsets.bottom),
-                          obscureText: false,
-                          enableSuggestions: false,
-                          autocorrect: false,
-                          decoration: const InputDecoration(
-                            labelText: 'Adres e-mail',
-                          ),
+                      child: TextField(
+                        controller: loginController,
+                        scrollPadding: EdgeInsets.only(
+                            bottom: MediaQuery.of(context).viewInsets.bottom),
+                        obscureText: false,
+                        enableSuggestions: false,
+                        autocorrect: false,
+                        decoration: const InputDecoration(
+                          labelText: 'Adres e-mail',
                         ),
                       ),
                     ),
@@ -78,17 +76,15 @@ class _LoginPageState extends State<LoginPage> {
                       height: 75,
                       margin: const EdgeInsets.only(
                           top: 10, bottom: 10, left: 25, right: 25),
-                      child: Container(
-                        child: TextField(
-                          controller: passwordController,
-                          scrollPadding: EdgeInsets.only(
-                              bottom: MediaQuery.of(context).viewInsets.bottom),
-                          obscureText: true,
-                          enableSuggestions: false,
-                          autocorrect: false,
-                          decoration: const InputDecoration(
-                            labelText: 'Hasło',
-                          ),
+                      child: TextField(
+                        controller: passwordController,
+                        scrollPadding: EdgeInsets.only(
+                            bottom: MediaQuery.of(context).viewInsets.bottom),
+                        obscureText: true,
+                        enableSuggestions: false,
+                        autocorrect: false,
+                        decoration: const InputDecoration(
+                          labelText: 'Hasło',
                         ),
                       ),
                     ),
@@ -105,9 +101,9 @@ class _LoginPageState extends State<LoginPage> {
                             showDialog<String>(
                               context: context,
                               builder: (BuildContext context) => AlertDialog(
-                                title: Text('Błąd logowania!'),
+                                title: const Text('Błąd logowania!'),
                                 content:
-                                    Text('Niewystarczające dane logowania!'),
+                                    const Text('Niewystarczające dane logowania!'),
                                 actions: [
                                   TextButton(
                                     onPressed: () =>
@@ -126,8 +122,8 @@ class _LoginPageState extends State<LoginPage> {
                             showDialog<String>(
                               context: context,
                               builder: (BuildContext context) => AlertDialog(
-                                title: Text('Błąd logowania!'),
-                                content: Text('Niepoprawny adres e-mail!'),
+                                title: const Text('Błąd logowania!'),
+                                content: const Text('Niepoprawny adres e-mail!'),
                                 actions: [
                                   TextButton(
                                     onPressed: () =>
@@ -149,8 +145,8 @@ class _LoginPageState extends State<LoginPage> {
                             showDialog<String>(
                               context: context,
                               builder: (BuildContext context) => AlertDialog(
-                                title: Text('Błąd logowania!'),
-                                content: Text('Nieprawidłowe dane logowania!'),
+                                title: const Text('Błąd logowania!'),
+                                content: const Text('Nieprawidłowe dane logowania!'),
                                 actions: [
                                   TextButton(
                                     onPressed: () =>
@@ -181,58 +177,56 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                       ),
                     ),
-                    Container(
-                      child: TextButton(
-                        onPressed: () {
-                          TextEditingController _emailController =
-                              TextEditingController();
-                          showDialog<String>(
-                            context: context,
-                            builder: (BuildContext context) => AlertDialog(
-                              title: Text('Resetowanie hasła'),
-                              content: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Text(
-                                      'Podaj e-mail na który będzie wysłany link do resetowania hasła'),
-                                  TextField(
-                                    controller: _emailController,
-                                  ),
-                                ],
-                              ),
-                              actions: [
-                                TextButton(
-                                  onPressed: () {
-                                    _emailController.text = "";
-                                    Navigator.pop(context, "");
-                                  },
-                                  child: const Text('Anuluj'),
-                                ),
-                                TextButton(
-                                  onPressed: () {
-                                    String text = _emailController.text;
-                                    _emailController.text = "";
-                                    Navigator.pop(context, text);
-                                  },
-                                  child: const Text('Wyślij e-mail'),
+                    TextButton(
+                      onPressed: () {
+                        TextEditingController emailController =
+                            TextEditingController();
+                        showDialog<String>(
+                          context: context,
+                          builder: (BuildContext context) => AlertDialog(
+                            title: const Text('Resetowanie hasła'),
+                            content: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                const Text(
+                                    'Podaj e-mail na który będzie wysłany link do resetowania hasła'),
+                                TextField(
+                                  controller: emailController,
                                 ),
                               ],
                             ),
-                          ).then((val) {
-                            String email = val!.trim();
-                            {
-                              if (email.isNotEmpty) {
-                                _auth.instance
-                                    .sendPasswordResetEmail(email: email);
-                                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                                  content: Text("Wysłano e-mail"),
-                                ));
-                              }
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  emailController.text = "";
+                                  Navigator.pop(context, "");
+                                },
+                                child: const Text('Anuluj'),
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  String text = emailController.text;
+                                  emailController.text = "";
+                                  Navigator.pop(context, text);
+                                },
+                                child: const Text('Wyślij e-mail'),
+                              ),
+                            ],
+                          ),
+                        ).then((val) {
+                          String email = val!.trim();
+                          {
+                            if (email.isNotEmpty) {
+                              _auth.instance
+                                  .sendPasswordResetEmail(email: email);
+                              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                                content: Text("Wysłano e-mail"),
+                              ));
                             }
-                          });
-                        },
-                        child: Text('Zapomniałem hasła'),
-                      ),
+                          }
+                        });
+                      },
+                      child: const Text('Zapomniałem hasła'),
                     ),
                   ],
                 ),

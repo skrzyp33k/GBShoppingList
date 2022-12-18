@@ -49,11 +49,11 @@ class _VerifyEmailState extends State<VerifyEmail> {
             Container(
                 width: 250,
                 height: 250,
-                margin: EdgeInsets.only(top: 50),
-                padding: EdgeInsets.all(25),
+                margin: const EdgeInsets.only(top: 50),
+                padding: const EdgeInsets.all(25),
                 child: Image.asset('assets/icon.png')),
             Container(
-              padding: EdgeInsets.all(25),
+              padding: const EdgeInsets.all(25),
               child: Text('Zweryfikuj adres e-mail!',
                   style: TextStyle(
                     color: Theme.of(context).colorScheme.secondary,
@@ -62,7 +62,7 @@ class _VerifyEmailState extends State<VerifyEmail> {
                   )),
             ),
             Container(
-              padding: EdgeInsets.all(25),
+              padding: const EdgeInsets.all(25),
               child: Text('Sprawdź swoją skrzynkę pocztową',
                   style: TextStyle(
                     color: Theme.of(context).colorScheme.secondary,
@@ -77,7 +77,7 @@ class _VerifyEmailState extends State<VerifyEmail> {
               child: ElevatedButton.icon(
                 onPressed: () {
                   _auth.sendEmailVerification();
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                     content: Text("Wysłano e-mail"),
                   ));
                 },

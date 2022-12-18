@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:gb_shopping_list/models/user.dart';
-import 'package:gb_shopping_list/props/palette.dart';
+import 'package:gb_shopping_list/widgets/list_item.dart';
 
 import 'package:move_to_background/move_to_background.dart';
 
 import 'package:gb_shopping_list/widgets/drawer.dart';
-import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -37,30 +35,30 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    TextEditingController _listNameController = new TextEditingController();
+    TextEditingController listNameController = TextEditingController();
 
-    final List<FloatingActionButton?> _fabsList = <FloatingActionButton?>[
+    final List<FloatingActionButton?> fabsList = <FloatingActionButton?>[
       FloatingActionButton(
           onPressed: () {
             showDialog<String>(
               context: context,
               builder: (BuildContext context) => AlertDialog(
-                title: Text('Wprowadź nazwę listy'),
+                title: const Text('Wprowadź nazwę listy'),
                 content: TextField(
-                  controller: _listNameController,
+                  controller: listNameController,
                 ),
                 actions: [
                   TextButton(
                     onPressed: () {
-                      _listNameController.text = "";
+                      listNameController.text = "";
                       Navigator.pop(context, "");
                     },
                     child: const Text('Anuluj'),
                   ),
                   TextButton(
                     onPressed: () {
-                      String text = _listNameController.text;
-                      _listNameController.text = "";
+                      String text = listNameController.text;
+                      listNameController.text = "";
                       Navigator.pop(context, text);
                     },
                     child: const Text('Dodaj'),
@@ -76,15 +74,15 @@ class _HomePageState extends State<HomePage> {
               }
             });
           },
-          child: Icon(Icons.add)),
+          child: const Icon(Icons.add)),
       null,
       FloatingActionButton(
           onPressed: () {
             showDialog<bool>(
               context: context,
               builder: (BuildContext context) => AlertDialog(
-                title: Text('Opróżnianie kosza'),
-                content: Text('Jesteś pewien?'),
+                title: const Text('Opróżnianie kosza'),
+                content: const Text('Jesteś pewien?'),
                 actions: [
                   TextButton(
                     onPressed: () => Navigator.pop(context, true),
@@ -102,16 +100,59 @@ class _HomePageState extends State<HomePage> {
               }
             });
           },
-          child: Icon(Icons.delete_forever)),
+          child: const Icon(Icons.delete_forever)),
     ];
 
-    final List<Widget> _tabsList = <Widget>[
-      ListView(),
-      ListView(),
-      ListView(),
-    ];
+    List<ListItem> rawItems = [
+      ListItem(listName: 'GBLista', checkedItems: 5, allItems: 9, inTrash: false, onTap: () {}),
+      ListItem(listName: 'GBLista', checkedItems: 9, allItems: 9, inTrash: false, onTap: () {}),
+      const ListItem(listName: 'GBLista', checkedItems: 5, allItems: 9, inTrash: true),
+    ]; //TODO: we to pobierz z bazy co nie
 
-    final user = Provider.of<UserModel?>(context);
+    List<ListItem> activeLists = [];
+    List<ListItem> finishedLists = [];
+    List<ListItem> trashedLists = [];
+
+    for(ListItem li in rawItems)
+    {
+      if(li.inTrash) {
+        trashedLists.add(li);
+      } else if(li.checkedItems >= li.allItems) {
+        finishedLists.add(li);
+      } else {
+        activeLists.add(li);
+      }
+    }
+
+    final List<Widget> tabsList = <Widget>[
+      ListView.builder(
+        padding: const EdgeInsets.all(5),
+        itemCount: activeLists.length,
+        itemBuilder: (BuildContext context, int index) {
+          return Container(
+            child: activeLists[index]
+          );
+        },
+      ),
+      ListView.builder(
+        padding: const EdgeInsets.all(5),
+        itemCount: finishedLists.length,
+        itemBuilder: (BuildContext context, int index) {
+          return Container(
+              child: finishedLists[index]
+          );
+        },
+      ),
+      ListView.builder(
+        padding: const EdgeInsets.all(5),
+        itemCount: trashedLists.length,
+        itemBuilder: (BuildContext context, int index) {
+          return Container(
+              child: trashedLists[index]
+          );
+        },
+      ),
+    ];
 
     return WillPopScope(
       onWillPop: () async {
@@ -120,12 +161,12 @@ class _HomePageState extends State<HomePage> {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: Text('$_barTitle'),
+          title: Text(_barTitle),
           foregroundColor: Theme.of(context).colorScheme.tertiary,
         ),
-        drawer: MenuDrawer(),
+        drawer: const MenuDrawer(),
         body: Center(
-          child: _tabsList.elementAt(_selectedTab),
+          child: tabsList.elementAt(_selectedTab),
         ),
         bottomNavigationBar: BottomNavigationBar(
           items: const <BottomNavigationBarItem>[
@@ -141,7 +182,7 @@ class _HomePageState extends State<HomePage> {
           currentIndex: _selectedTab,
           onTap: _onTabTapped,
         ),
-        floatingActionButton: _fabsList.elementAt(_selectedTab),
+        floatingActionButton: fabsList.elementAt(_selectedTab),
       ),
     );
   }

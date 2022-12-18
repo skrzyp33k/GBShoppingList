@@ -58,13 +58,13 @@ class GBSLApp extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           initialRoute: '/',
           routes:{
-            '/': (context) => Wrapper(),
-            '/start': (context) => StartPage(),
-            '/login': (context) => LoginPage(),
-            '/register': (context) => RegisterPage(),
-            '/home': (context) => HomePage(),
-            '/about': (context) => AppInfo(),
-            '/settings': (context) => AccountSettings(),
+            '/': (context) => const Wrapper(),
+            '/start': (context) => const StartPage(),
+            '/login': (context) => const LoginPage(),
+            '/register': (context) => const RegisterPage(),
+            '/home': (context) => const HomePage(),
+            '/about': (context) => const AppInfo(),
+            '/settings': (context) => const AccountSettings(),
           }
       ),
     );

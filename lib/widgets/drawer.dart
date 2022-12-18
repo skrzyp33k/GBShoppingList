@@ -14,7 +14,7 @@ class _MenuDrawerState extends State<MenuDrawer> {
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<UserModel?>(context);
-    final AuthService _auth = AuthService();
+    final AuthService auth = AuthService();
     return Drawer(
       child: ListView(
         padding: EdgeInsets.zero,
@@ -27,7 +27,7 @@ class _MenuDrawerState extends State<MenuDrawer> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 Container(
-                  padding: EdgeInsets.all(15),
+                  padding: const EdgeInsets.all(15),
                   child: Text(
                     'Zalogowano jako:',
                     style: TextStyle(
@@ -37,7 +37,7 @@ class _MenuDrawerState extends State<MenuDrawer> {
                   ),
                 ),
                 Container(
-                  padding: EdgeInsets.all(15),
+                  padding: const EdgeInsets.all(15),
                   child: Text(user?.email ?? "",
                       style: TextStyle(
                         color: Theme.of(context).colorScheme.tertiary,
@@ -48,31 +48,31 @@ class _MenuDrawerState extends State<MenuDrawer> {
             ),
           ),
           ListTile(
-            leading: Icon(Icons.shopping_cart_outlined),
-            title: Text('Moje listy'),
+            leading: const Icon(Icons.shopping_cart_outlined),
+            title: const Text('Moje listy'),
             onTap: () {
               Navigator.pushNamed(context, '/home');
             }
           ),
           ListTile(
-            leading: Icon(Icons.settings),
-            title: Text('Ustawienia konta'),
+            leading: const Icon(Icons.settings),
+            title: const Text('Ustawienia konta'),
               onTap: () {
                 Navigator.pushNamed(context, '/settings');
               }
           ),
           ListTile(
-            leading: Icon(Icons.info),
-            title: Text('O aplikacji'),
+            leading: const Icon(Icons.info),
+            title: const Text('O aplikacji'),
               onTap: () {
                 Navigator.pushNamed(context, '/about');
               }
           ),
           ListTile(
-            leading: Icon(Icons.logout),
-            title: Text('Wyloguj się'),
+            leading: const Icon(Icons.logout),
+            title: const Text('Wyloguj się'),
             onTap: () async {
-              await _auth.signOut();
+              await auth.signOut();
               Navigator.pushNamed(context, '/');
             },
           ),
