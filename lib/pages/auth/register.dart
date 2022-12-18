@@ -202,7 +202,7 @@ class _RegisterPageState extends State<RegisterPage> {
                             loginController.text = "";
                             passwordController.text = "";
                           } else {
-                            Navigator.pushNamed(context, '/home');
+                            Navigator.pushNamed(context, '/');
                           }
                         },
                         icon: Icon(

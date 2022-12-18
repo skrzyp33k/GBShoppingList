@@ -9,9 +9,7 @@ class AuthService {
   UserModel? _createModel(User? user) {
     return user != null
         ? UserModel(
-            uid: user.uid,
-            emailVerified: user.emailVerified,
-            email: user.email)
+            uid: user.uid, emailVerified: user.emailVerified, email: user.email)
         : null;
   }
 
@@ -20,14 +18,24 @@ class AuthService {
     return _auth.authStateChanges().map(_createModel);
   }
 
-  //register with email and password
+  //getter for instance
+  FirebaseAuth get instance {
+    return _auth;
+  }
 
+  //send verification email
+  void sendEmailVerification() {
+    _auth.currentUser?.sendEmailVerification();
+  }
+
+  //register with email and password
   Future registerEmail(
       {required String email, required String password}) async {
     try {
       UserCredential result = await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
       User? user = result.user;
+      sendEmailVerification();
       return _createModel(user);
     } catch (ex) {
       return null;

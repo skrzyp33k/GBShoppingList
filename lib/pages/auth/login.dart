@@ -163,7 +163,7 @@ class _LoginPageState extends State<LoginPage> {
                             loginController.text = "";
                             passwordController.text = "";
                           } else {
-                            Navigator.pushNamed(context, '/home');
+                            Navigator.pushNamed(context, '/');
                           }
                         },
                         icon: Icon(

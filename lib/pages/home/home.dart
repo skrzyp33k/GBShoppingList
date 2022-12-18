@@ -68,8 +68,11 @@ class _HomePageState extends State<HomePage> {
                 ],
               ),
             ).then((val) {
-              if (val!.isNotEmpty) {
-                //TODO: dodawanie listy
+              String name = val!.trim();
+              {
+                if (name.isNotEmpty) {
+                  //TODO: dodawanie listy
+                }
               }
             });
           },
