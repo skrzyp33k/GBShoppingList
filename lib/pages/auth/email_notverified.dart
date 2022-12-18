@@ -77,6 +77,9 @@ class _VerifyEmailState extends State<VerifyEmail> {
               child: ElevatedButton.icon(
                 onPressed: () {
                   _auth.sendEmailVerification();
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content: Text("Wysłano e-mail"),
+                  ));
                 },
                 icon: Icon(
                   Icons.mark_email_read,

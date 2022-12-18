@@ -181,6 +181,59 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                       ),
                     ),
+                    Container(
+                      child: TextButton(
+                        onPressed: () {
+                          TextEditingController _emailController =
+                              TextEditingController();
+                          showDialog<String>(
+                            context: context,
+                            builder: (BuildContext context) => AlertDialog(
+                              title: Text('Resetowanie hasła'),
+                              content: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Text(
+                                      'Podaj e-mail na który będzie wysłany link do resetowania hasła'),
+                                  TextField(
+                                    controller: _emailController,
+                                  ),
+                                ],
+                              ),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    _emailController.text = "";
+                                    Navigator.pop(context, "");
+                                  },
+                                  child: const Text('Anuluj'),
+                                ),
+                                TextButton(
+                                  onPressed: () {
+                                    String text = _emailController.text;
+                                    _emailController.text = "";
+                                    Navigator.pop(context, text);
+                                  },
+                                  child: const Text('Wyślij e-mail'),
+                                ),
+                              ],
+                            ),
+                          ).then((val) {
+                            String email = val!.trim();
+                            {
+                              if (email.isNotEmpty) {
+                                _auth.instance
+                                    .sendPasswordResetEmail(email: email);
+                                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                  content: Text("Wysłano e-mail"),
+                                ));
+                              }
+                            }
+                          });
+                        },
+                        child: Text('Zapomniałem hasła'),
+                      ),
+                    ),
                   ],
                 ),
               ),

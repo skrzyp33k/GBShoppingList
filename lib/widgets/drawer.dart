@@ -48,12 +48,25 @@ class _MenuDrawerState extends State<MenuDrawer> {
             ),
           ),
           ListTile(
+            leading: Icon(Icons.shopping_cart_outlined),
+            title: Text('Moje listy'),
+            onTap: () {
+              Navigator.pushNamed(context, '/home');
+            }
+          ),
+          ListTile(
             leading: Icon(Icons.settings),
             title: Text('Ustawienia konta'),
+              onTap: () {
+                Navigator.pushNamed(context, '/settings');
+              }
           ),
           ListTile(
             leading: Icon(Icons.info),
             title: Text('O aplikacji'),
+              onTap: () {
+                Navigator.pushNamed(context, '/about');
+              }
           ),
           ListTile(
             leading: Icon(Icons.logout),

@@ -64,4 +64,10 @@ class AuthService {
       return null;
     }
   }
+
+  //delete user
+  void deleteUser() async {
+    await _auth.currentUser!.delete();
+    signOut();
+  }
 }
