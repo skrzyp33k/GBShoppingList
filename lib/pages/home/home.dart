@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:gb_shopping_list/widgets/list_item.dart';
+import 'package:gb_shopping_list/widgets/list_card.dart';
 
 import 'package:move_to_background/move_to_background.dart';
 
@@ -74,7 +74,9 @@ class _HomePageState extends State<HomePage> {
               }
             });
           },
-          child: const Icon(Icons.add)),
+          child: const Icon(Icons.add),
+        foregroundColor: Theme.of(context).colorScheme.tertiary,
+      ),
       null,
       FloatingActionButton(
           onPressed: () {
@@ -100,20 +102,21 @@ class _HomePageState extends State<HomePage> {
               }
             });
           },
-          child: const Icon(Icons.delete_forever)),
+          child: const Icon(Icons.delete_forever),
+        foregroundColor: Theme.of(context).colorScheme.tertiary,),
     ];
 
-    List<ListItem> rawItems = [
-      ListItem(listName: 'GBLista', checkedItems: 5, allItems: 9, inTrash: false, onTap: () {}),
-      ListItem(listName: 'GBLista', checkedItems: 9, allItems: 9, inTrash: false, onTap: () {}),
-      const ListItem(listName: 'GBLista', checkedItems: 5, allItems: 9, inTrash: true),
+    List<ListCard> rawItems = [
+      const ListCard(listName: 'GBLista', checkedItems: 5, allItems: 9, inTrash: false),
+      const ListCard(listName: 'GBLista', checkedItems: 9, allItems: 9, inTrash: false),
+      const ListCard(listName: 'GBLista', checkedItems: 5, allItems: 9, inTrash: true),
     ]; //TODO: we to pobierz z bazy co nie
 
-    List<ListItem> activeLists = [];
-    List<ListItem> finishedLists = [];
-    List<ListItem> trashedLists = [];
+    List<ListCard> activeLists = [];
+    List<ListCard> finishedLists = [];
+    List<ListCard> trashedLists = [];
 
-    for(ListItem li in rawItems)
+    for(ListCard li in rawItems)
     {
       if(li.inTrash) {
         trashedLists.add(li);
@@ -125,32 +128,56 @@ class _HomePageState extends State<HomePage> {
     }
 
     final List<Widget> tabsList = <Widget>[
-      ListView.builder(
-        padding: const EdgeInsets.all(5),
-        itemCount: activeLists.length,
-        itemBuilder: (BuildContext context, int index) {
-          return Container(
-            child: activeLists[index]
-          );
-        },
+      RefreshIndicator(
+        onRefresh: () {  return Future.delayed
+          (const Duration(seconds: 1),() {
+          setState(() {
+            //rawItems = //TODO: pobieranie listy
+          });
+        });},
+        child: ListView.builder(
+          padding: const EdgeInsets.all(5),
+          itemCount: activeLists.length,
+          itemBuilder: (BuildContext context, int index) {
+            return Container(
+              child: activeLists[index]
+            );
+          },
+        ),
       ),
-      ListView.builder(
-        padding: const EdgeInsets.all(5),
-        itemCount: finishedLists.length,
-        itemBuilder: (BuildContext context, int index) {
-          return Container(
-              child: finishedLists[index]
-          );
-        },
+      RefreshIndicator(
+        onRefresh: () {  return Future.delayed
+          (const Duration(seconds: 1),() {
+          setState(() {
+            //rawItems = //TODO: pobieranie listy
+          });
+        });},
+        child: ListView.builder(
+          padding: const EdgeInsets.all(5),
+          itemCount: finishedLists.length,
+          itemBuilder: (BuildContext context, int index) {
+            return Container(
+                child: finishedLists[index]
+            );
+          },
+        ),
       ),
-      ListView.builder(
-        padding: const EdgeInsets.all(5),
-        itemCount: trashedLists.length,
-        itemBuilder: (BuildContext context, int index) {
-          return Container(
-              child: trashedLists[index]
-          );
-        },
+      RefreshIndicator(
+        onRefresh: () {  return Future.delayed
+          (const Duration(seconds: 1),() {
+          setState(() {
+            //rawItems = //TODO: pobieranie listy
+          });
+        });},
+        child: ListView.builder(
+          padding: const EdgeInsets.all(5),
+          itemCount: trashedLists.length,
+          itemBuilder: (BuildContext context, int index) {
+            return Container(
+                child: trashedLists[index]
+            );
+          },
+        ),
       ),
     ];
 
