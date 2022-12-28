@@ -103,7 +103,7 @@ class _HomePageState extends State<HomePage> {
             });
           },
           child: const Icon(Icons.delete_forever),
-        foregroundColor: Theme.of(context).colorScheme.tertiary,),
+        foregroundColor: Theme.of(context).colorScheme.tertiary),
     ];
 
     List<ListCard> rawItems = [
