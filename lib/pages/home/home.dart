@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:gb_shopping_list/models/item.dart';
+import 'package:gb_shopping_list/models/list.dart';
 import 'package:gb_shopping_list/widgets/list_card.dart';
 
 import 'package:move_to_background/move_to_background.dart';
@@ -39,42 +41,43 @@ class _HomePageState extends State<HomePage> {
 
     final List<FloatingActionButton?> fabsList = <FloatingActionButton?>[
       FloatingActionButton(
-          onPressed: () {
-            showDialog<String>(
-              context: context,
-              builder: (BuildContext context) => AlertDialog(
-                title: const Text('Wprowadź nazwę listy'),
-                content: TextField(
-                  controller: listNameController,
-                ),
-                actions: [
-                  TextButton(
-                    onPressed: () {
-                      listNameController.text = "";
-                      Navigator.pop(context, "");
-                    },
-                    child: const Text('Anuluj'),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      String text = listNameController.text;
-                      listNameController.text = "";
-                      Navigator.pop(context, text);
-                    },
-                    child: const Text('Dodaj'),
-                  ),
-                ],
+        onPressed: () {
+          showDialog<String>(
+            context: context,
+            builder: (BuildContext context) => AlertDialog(
+              title: const Text('Nazwa listy'),
+              content: TextField(
+                autofocus: true,
+                controller: listNameController,
               ),
-            ).then((val) {
-              String name = val!.trim();
-              {
-                if (name.isNotEmpty) {
-                  //TODO: dodawanie listy
-                }
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    listNameController.text = "";
+                    Navigator.pop(context, "");
+                  },
+                  child: const Text('Anuluj'),
+                ),
+                TextButton(
+                  onPressed: () {
+                    String text = listNameController.text;
+                    listNameController.text = "";
+                    Navigator.pop(context, text);
+                  },
+                  child: const Text('Dodaj'),
+                ),
+              ],
+            ),
+          ).then((val) {
+            String name = val!.trim();
+            {
+              if (name.isNotEmpty) {
+                //TODO: dodawanie listy
               }
-            });
-          },
-          child: const Icon(Icons.add),
+            }
+          });
+        },
+        child: const Icon(Icons.add),
         foregroundColor: Theme.of(context).colorScheme.tertiary,
       ),
       null,
@@ -102,80 +105,121 @@ class _HomePageState extends State<HomePage> {
               }
             });
           },
-          child: const Icon(Icons.delete_forever),
-        foregroundColor: Theme.of(context).colorScheme.tertiary),
+          foregroundColor: Theme.of(context).colorScheme.tertiary,
+          child: const Icon(Icons.delete_forever)),
     ];
 
     List<ListCard> rawItems = [
-      const ListCard(listName: 'GBLista', checkedItems: 5, allItems: 9, inTrash: false),
-      const ListCard(listName: 'GBLista', checkedItems: 9, allItems: 9, inTrash: false),
-      const ListCard(listName: 'GBLista', checkedItems: 5, allItems: 9, inTrash: true),
+      ListCard(
+          listModel:
+              ListModel(listName: "W trakcie", isTrashed: false, listItems: [
+        ItemModel(
+            itemName: "element 1",
+            itemCount: '5',
+            itemUnit: 'szt',
+            isChecked: true),
+        ItemModel(
+            itemName: "element 2",
+            itemCount: '0.5',
+            itemUnit: 'kg',
+            isChecked: false),
+      ])),
+      ListCard(
+          listModel:
+              ListModel(listName: "Skonczona", isTrashed: false, listItems: [
+        ItemModel(
+            itemName: "element 1",
+            itemCount: '2',
+            itemUnit: 'szt',
+            isChecked: true),
+        ItemModel(
+            itemName: "element 2",
+            itemCount: '1.5',
+            itemUnit: 'kg',
+            isChecked: true),
+      ])),
+      ListCard(
+          listModel:
+              ListModel(listName: "W koszu", isTrashed: true, listItems: [
+        ItemModel(
+            itemName: "element 1",
+            itemCount: '25',
+            itemUnit: 'szt',
+            isChecked: false),
+        ItemModel(
+            itemName: "element 2",
+            itemCount: '14.5',
+            itemUnit: 'l',
+            isChecked: false),
+      ])),
     ]; //TODO: we to pobierz z bazy co nie
 
     List<ListCard> activeLists = [];
     List<ListCard> finishedLists = [];
     List<ListCard> trashedLists = [];
 
-    for(ListCard li in rawItems)
-    {
-      if(li.inTrash) {
+    for (ListCard li in rawItems) {
+      if (li.listModel.isTrashed) {
         trashedLists.add(li);
-      } else if(li.checkedItems >= li.allItems) {
-        finishedLists.add(li);
       } else {
-        activeLists.add(li);
+        int checked = 0;
+        for (ItemModel i in li.listModel.listItems) {
+          if (i.isChecked) checked++;
+        }
+        if (checked >= li.listModel.listItems.length) {
+          finishedLists.add(li);
+        } else {
+          activeLists.add(li);
+        }
       }
     }
 
     final List<Widget> tabsList = <Widget>[
       RefreshIndicator(
-        onRefresh: () {  return Future.delayed
-          (const Duration(seconds: 1),() {
-          setState(() {
-            //rawItems = //TODO: pobieranie listy
+        onRefresh: () {
+          return Future.delayed(const Duration(seconds: 1), () {
+            setState(() {
+              //rawItems = //TODO: pobieranie listy
+            });
           });
-        });},
+        },
         child: ListView.builder(
           padding: const EdgeInsets.all(5),
           itemCount: activeLists.length,
           itemBuilder: (BuildContext context, int index) {
-            return Container(
-              child: activeLists[index]
-            );
+            return Container(child: activeLists[index]);
           },
         ),
       ),
       RefreshIndicator(
-        onRefresh: () {  return Future.delayed
-          (const Duration(seconds: 1),() {
-          setState(() {
-            //rawItems = //TODO: pobieranie listy
+        onRefresh: () {
+          return Future.delayed(const Duration(seconds: 1), () {
+            setState(() {
+              //rawItems = //TODO: pobieranie listy
+            });
           });
-        });},
+        },
         child: ListView.builder(
           padding: const EdgeInsets.all(5),
           itemCount: finishedLists.length,
           itemBuilder: (BuildContext context, int index) {
-            return Container(
-                child: finishedLists[index]
-            );
+            return Container(child: finishedLists[index]);
           },
         ),
       ),
       RefreshIndicator(
-        onRefresh: () {  return Future.delayed
-          (const Duration(seconds: 1),() {
-          setState(() {
-            //rawItems = //TODO: pobieranie listy
+        onRefresh: () {
+          return Future.delayed(const Duration(seconds: 1), () {
+            setState(() {
+              //rawItems = //TODO: pobieranie listy
+            });
           });
-        });},
+        },
         child: ListView.builder(
           padding: const EdgeInsets.all(5),
           itemCount: trashedLists.length,
           itemBuilder: (BuildContext context, int index) {
-            return Container(
-                child: trashedLists[index]
-            );
+            return Container(child: trashedLists[index]);
           },
         ),
       ),

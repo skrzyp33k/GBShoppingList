@@ -25,14 +25,19 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(const GBSLApp());
+  runApp(GBSLApp());
 }
 
+List<String> units = <String>["szt", "kg", "l"];
+
 class GBSLApp extends StatelessWidget {
-  const GBSLApp({super.key});
+  GBSLApp({super.key});
 
   @override
   Widget build(BuildContext context) {
+
+    //TODO: pobierz liste jednostek z bazy
+
     return StreamProvider<UserModel?>.value(
       value: AuthService().user,
       initialData: null,

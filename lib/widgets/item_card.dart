@@ -1,20 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:gb_shopping_list/pages/home/item_info.dart';
-import 'package:gb_shopping_list/props/palette.dart';
+
+import 'package:gb_shopping_list/models/item.dart';
 
 class ItemCard extends StatefulWidget {
-  const ItemCard(
-      {Key? key,
-      required this.itemName,
-      required this.isChecked,
-      required this.itemCount})
-      : super(key: key);
+  const ItemCard({Key? key, required this.itemModel}) : super(key: key);
 
-  final String itemName;
-
-  final String itemCount;
-
-  final bool isChecked;
+  final ItemModel itemModel;
 
   @override
   State<ItemCard> createState() => _ItemCardState();
@@ -26,18 +18,20 @@ class _ItemCardState extends State<ItemCard> {
   @protected
   @mustCallSuper
   void initState() {
-    isChecked = widget.isChecked;
+    isChecked = widget.itemModel.isChecked;
   }
 
   @override
   Widget build(BuildContext context) {
-    String itemName = widget.itemName;
-    String itemCount = widget.itemCount;
+    String itemName = widget.itemModel.itemName;
+    String itemCount = widget.itemModel.itemCount;
+    String itemUnit = widget.itemModel.itemUnit;
+
     return InkWell(
       onTap: () => Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) => ItemInfoPage(itemName: itemName))),
+              builder: (context) => ItemInfoPage(itemModel: widget.itemModel))),
       child: Container(
         constraints: const BoxConstraints(minWidth: 100, maxWidth: 200),
         margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
@@ -64,9 +58,22 @@ class _ItemCardState extends State<ItemCard> {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.all(15),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 2.5, vertical: 10),
                   child: Text(
                     itemCount,
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.tertiary,
+                      fontSize: 14,
+                      letterSpacing: 1,
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 2.5, vertical: 10),
+                  child: Text(
+                    itemUnit,
                     style: TextStyle(
                       color: Theme.of(context).colorScheme.tertiary,
                       fontSize: 14,

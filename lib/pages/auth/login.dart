@@ -191,6 +191,7 @@ class _LoginPageState extends State<LoginPage> {
                                 const Text(
                                     'Podaj e-mail na który będzie wysłany link do resetowania hasła'),
                                 TextField(
+                                  autofocus: true,
                                   controller: emailController,
                                 ),
                               ],

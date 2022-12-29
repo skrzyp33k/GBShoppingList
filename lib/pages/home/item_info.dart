@@ -1,31 +1,63 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class ItemInfoPage extends StatefulWidget {
-  const ItemInfoPage({Key? key, required this.itemName}) : super(key: key);
+import 'package:gb_shopping_list/main.dart';
+import 'package:gb_shopping_list/models/item.dart';
 
-  final String itemName;
+class ItemInfoPage extends StatefulWidget {
+  const ItemInfoPage({Key? key, required this.itemModel}) : super(key: key);
+
+  final ItemModel itemModel;
 
   @override
   State<ItemInfoPage> createState() => _ItemInfoPageState();
 }
 
 class _ItemInfoPageState extends State<ItemInfoPage> {
-  List<String> units = <String>["szt", "kg", "l"];
-
-  late String unit = units.first;
-
   @override
   Widget build(BuildContext context) {
-    String itemName = widget.itemName;
+    ItemModel item = widget.itemModel;
+
+    TextEditingController nameController = TextEditingController();
+    TextEditingController countController = TextEditingController();
+
+    nameController.text = item.itemName;
+    countController.text = item.itemCount;
 
     return WillPopScope(
       onWillPop: () async {
-        return true;
-      }, //TODO: dialog czy zapisać zmiany
+        showDialog<bool?>(
+          context: context,
+          builder: (BuildContext context) => AlertDialog(
+            title: const Text('Zapisać zmiany?'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context, false);
+                },
+                child: const Text('Nie'),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context, true);
+                },
+                child: const Text('Tak'),
+              ),
+            ],
+          ),
+        ).then((val) {
+          {
+            if (val!) //TODO: zapisanie zmian
+            {}
+            Navigator.pop(context);
+            return true;
+          }
+        });
+        return false;
+      },
       child: Scaffold(
         appBar: AppBar(
-          title: Text(itemName),
+          title: Text(item.itemName),
           foregroundColor: Theme.of(context).colorScheme.tertiary,
           automaticallyImplyLeading: false,
           centerTitle: true,
@@ -36,7 +68,9 @@ class _ItemInfoPageState extends State<ItemInfoPage> {
             Row(
               children: [
                 Text("Nazwa:"),
-                Expanded(child: TextField()),
+                Expanded(child: TextField(
+                  controller: nameController,
+                )),
               ],
             ),
             Row(
@@ -47,6 +81,7 @@ class _ItemInfoPageState extends State<ItemInfoPage> {
                 Expanded(
                     child: Container(
                         child: TextField(
+                          controller: countController,
                   keyboardType: TextInputType.number,
                   inputFormatters: <TextInputFormatter>[
                     FilteringTextInputFormatter.allow(RegExp(r"[0-9.]")),
@@ -61,7 +96,7 @@ class _ItemInfoPageState extends State<ItemInfoPage> {
                   ],
                 ))),
                 DropdownButton<String>(
-                    value: unit,
+                    value: item.itemUnit,
                     items: units.map<DropdownMenuItem<String>>((String val) {
                       return DropdownMenuItem<String>(
                         value: val,
@@ -70,7 +105,7 @@ class _ItemInfoPageState extends State<ItemInfoPage> {
                     }).toList(),
                     onChanged: (String? val) {
                       setState(() {
-                        unit = val!;
+                        item.itemUnit = val!;
                       });
                     })
               ],

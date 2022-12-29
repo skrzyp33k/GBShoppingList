@@ -1,23 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:gb_shopping_list/models/item.dart';
+import 'package:gb_shopping_list/models/list.dart';
 import 'package:gb_shopping_list/pages/home/list_info.dart';
-import 'package:gb_shopping_list/widgets/item_card.dart';
 
 class ListCard extends StatefulWidget {
-  const ListCard(
-      {Key? key,
-      required this.listName,
-      required this.checkedItems,
-      required this.allItems,
-      required this.inTrash})
-      : super(key: key);
+  ListCard({
+    Key? key,
+    required this.listModel,
+  }) : super(key: key);
 
-  final String listName;
+  ListModel listModel;
 
-  final int checkedItems;
-
-  final int allItems;
-
-  final bool inTrash;
+  int checkedItems = 0;
+  int allItems = 0;
 
   @override
   State<ListCard> createState() => _ListCardState();
@@ -26,16 +21,25 @@ class ListCard extends StatefulWidget {
 class _ListCardState extends State<ListCard> {
   @override
   Widget build(BuildContext context) {
+    ListModel list = widget.listModel;
+
+    widget.allItems = list.listItems.length;
+
+    for (ItemModel i in list.listItems) {
+      if (i.isChecked) widget.checkedItems++;
+    }
+
     String listSize = "${widget.checkedItems} / ${widget.allItems}";
-    String listName = widget.listName;
-    bool inTrash = widget.inTrash;
+    String listName = list.listName;
+    bool isTrashed = list.isTrashed;
     return InkWell(
-      onTap: () => inTrash
+      onTap: () => isTrashed
           ? null
           : Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) => ListInfoPage(listName: listName, items:[ItemCard(itemName: 'GB1', itemCount:'50kg', isChecked: true), ItemCard(itemName: 'GB2', itemCount: '3szt', isChecked: false)]))),
+                  builder: (context) =>
+                      ListInfoPage(listName: listName, items: list.listItems))),
       child: Container(
         constraints: const BoxConstraints(minWidth: 100, maxWidth: 200),
         margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
@@ -57,7 +61,7 @@ class _ListCardState extends State<ListCard> {
                 ),
               ),
             )),
-            widget.inTrash
+            widget.listModel.isTrashed
                 ? Column(
                     children: [
                       IconButton(
