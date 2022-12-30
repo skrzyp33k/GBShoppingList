@@ -21,9 +21,11 @@ class _ItemInfoPageState extends State<ItemInfoPage> {
 
     TextEditingController nameController = TextEditingController();
     TextEditingController countController = TextEditingController();
+    TextEditingController infoController = TextEditingController();
 
     nameController.text = item.itemName;
     countController.text = item.itemCount;
+    infoController.text = item.itemInfo;
 
     List<String> units = Units().list;
 
@@ -115,6 +117,7 @@ class _ItemInfoPageState extends State<ItemInfoPage> {
             ),
             Text('Dodatkowe informacje:'),
             TextField(
+              controller: infoController,
               keyboardType: TextInputType.multiline,
               minLines: 1, //Normal textInputField will be displayed
               maxLines: 5, // when user presses enter it will adapt to it
