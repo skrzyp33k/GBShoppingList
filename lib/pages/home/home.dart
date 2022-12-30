@@ -83,25 +83,31 @@ class _HomePageState extends State<HomePage> {
       null,
       FloatingActionButton(
           onPressed: () {
-            showDialog<bool>(
+            showDialog<bool?>(
               context: context,
               builder: (BuildContext context) => AlertDialog(
-                title: const Text('Opróżnianie kosza'),
-                content: const Text('Jesteś pewien?'),
+                title: const Text('Czy usunąć wszystkie listy na zawsze?'),
+                content: const Text('To jest bardzo długo!'),
                 actions: [
                   TextButton(
-                    onPressed: () => Navigator.pop(context, true),
+                    onPressed: () {
+                      Navigator.pop(context, true);
+                    },
                     child: const Text('Tak'),
                   ),
                   TextButton(
-                    onPressed: () => Navigator.pop(context, false),
+                    onPressed: () {
+                      Navigator.pop(context, false);
+                    },
                     child: const Text('Nie'),
                   ),
                 ],
               ),
             ).then((val) {
-              if (val!) {
-                //TODO: usuwanie list
+              {
+                if (val!) {
+                  DatabaseService(uid: AuthService().uid).deleteAllListsFromTrash();
+                }
               }
             });
           },

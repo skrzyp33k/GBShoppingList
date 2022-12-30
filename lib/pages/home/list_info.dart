@@ -24,10 +24,16 @@ class ListInfoPage extends StatefulWidget {
 }
 
 class _ListInfoPageState extends State<ListInfoPage> {
+  late String listName;
+
+  @protected
+  @mustCallSuper
+  void initState() {
+    listName = widget.listName;
+  }
+
   @override
   Widget build(BuildContext context) {
-    String listName = widget.listName;
-
     String unit = Units().list.first;
 
     setState(() {
@@ -47,7 +53,53 @@ class _ListInfoPageState extends State<ListInfoPage> {
           Padding(
               padding: EdgeInsets.only(right: 20.0),
               child: GestureDetector(
-                onTap: () {},
+                onTap: () {
+                  TextEditingController nameController =
+                      TextEditingController();
+                  showDialog<String>(
+                    context: context,
+                    builder: (BuildContext context) => AlertDialog(
+                      title: const Text('Zmiana nazwy listy'),
+                      content: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          TextField(
+                            autofocus: true,
+                            controller: nameController,
+                          ),
+                        ],
+                      ),
+                      actions: [
+                        TextButton(
+                          onPressed: () {
+                            String text = nameController.text;
+                            nameController.text = "";
+                            Navigator.pop(context, text);
+                          },
+                          child: const Text('Zmień'),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            nameController.text = "";
+                            Navigator.pop(context, "");
+                          },
+                          child: const Text('Anuluj'),
+                        ),
+                      ],
+                    ),
+                  ).then((val) {
+                    String name = val!.trim();
+                    {
+                      if (name.isNotEmpty) {
+                        DatabaseService(uid: AuthService().uid)
+                            .renameList(widget.listID, name);
+                        setState(() {
+                          listName = name;
+                        });
+                      }
+                    }
+                  });
+                },
                 child: Icon(
                   Icons.edit,
                 ),
@@ -55,7 +107,36 @@ class _ListInfoPageState extends State<ListInfoPage> {
           Padding(
               padding: EdgeInsets.only(right: 20.0),
               child: GestureDetector(
-                onTap: () {},
+                onTap: () {
+                  showDialog<bool>(
+                    context: context,
+                    builder: (BuildContext context) => AlertDialog(
+                      title: const Text('Czy przenieść listę do kosza?'),
+                      actions: [
+                        TextButton(
+                          onPressed: () {
+                            Navigator.pop(context, true);
+                          },
+                          child: const Text('Tak'),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            Navigator.pop(context, false);
+                          },
+                          child: const Text('Nie'),
+                        ),
+                      ],
+                    ),
+                  ).then((val) {
+                    {
+                      if (val!) {
+                        DatabaseService(uid: AuthService().uid)
+                            .moveListToTrash(widget.listID);
+                        Navigator.pop(context);
+                      }
+                    }
+                  });
+                },
                 child: Icon(Icons.delete),
               )),
         ],
@@ -75,25 +156,26 @@ class _ListInfoPageState extends State<ListInfoPage> {
 
           List<ItemModel> items = [];
 
-          for(var item in rawItems)
-            {
-              items.add(ItemModel(
-                  itemName: item['itemName'],
-                  itemCount: item['itemCount'],
-                  itemUnit: item['itemUnit'],
-                  isChecked: item['isChecked'],
-                  itemInfo: item['itemInfo'],
-                  listID: widget.listID));
-            }
+          for (var item in rawItems) {
+            items.add(ItemModel(
+                itemName: item['itemName'],
+                itemCount: item['itemCount'],
+                itemUnit: item['itemUnit'],
+                isChecked: item['isChecked'],
+                itemInfo: item['itemInfo'],
+                listID: widget.listID));
+          }
 
-          items.sort((a,b) => a.itemName.compareTo(b.itemName));
+          items.sort((a, b) => a.itemName.compareTo(b.itemName));
 
           return ListView.builder(
             padding: const EdgeInsets.all(5),
             itemCount: items.length,
             itemBuilder: (BuildContext context, int index) {
               return Container(
-                  child: ItemCard(itemModel: items[index],));
+                  child: ItemCard(
+                itemModel: items[index],
+              ));
             },
           );
         },

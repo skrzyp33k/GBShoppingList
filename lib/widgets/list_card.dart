@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:gb_shopping_list/models/item.dart';
 import 'package:gb_shopping_list/models/list.dart';
 import 'package:gb_shopping_list/pages/home/list_info.dart';
+import 'package:gb_shopping_list/services/auth.dart';
+import 'package:gb_shopping_list/services/database.dart';
 
 class ListCard extends StatefulWidget {
   ListCard({
@@ -66,14 +68,40 @@ class _ListCardState extends State<ListCard> {
                     children: [
                       IconButton(
                         onPressed: () {
-                          //TODO: przywróć
+                          DatabaseService(uid: AuthService().uid).moveListFromTrash(widget.listModel.ID);
                         },
                         icon: const Icon(Icons.restore_from_trash),
                         color: Theme.of(context).colorScheme.tertiary,
                       ),
                       IconButton(
                         onPressed: () {
-                          //TODO: usuń
+                          showDialog<bool>(
+                            context: context,
+                            builder: (BuildContext context) => AlertDialog(
+                              title: const Text('Czy usunąć listę na zawsze?'),
+                              content: const Text('To jest bardzo długo!'),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.pop(context, true);
+                                  },
+                                  child: const Text('Tak'),
+                                ),
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.pop(context, false);
+                                  },
+                                  child: const Text('Nie'),
+                                ),
+                              ],
+                            ),
+                          ).then((val) {
+                            {
+                              if (val!) {
+                                DatabaseService(uid: AuthService().uid).deleteListFromTrash(widget.listModel.ID);
+                              }
+                            }
+                          });
                         },
                         icon: const Icon(Icons.delete_forever),
                         color: Theme.of(context).colorScheme.tertiary,

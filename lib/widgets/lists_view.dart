@@ -5,7 +5,7 @@ import 'package:gb_shopping_list/widgets/list_card.dart';
 import 'package:provider/provider.dart';
 
 class ListsView extends StatefulWidget {
-  const ListsView({Key? key, required this.pageNumber}) : super(key: key);
+  ListsView({Key? key, required this.pageNumber}) : super(key: key);
 
   final int pageNumber;
 

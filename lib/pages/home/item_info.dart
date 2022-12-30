@@ -57,7 +57,7 @@ class _ItemInfoPageState extends State<ItemInfoPage> {
           ),
         ).then((val) {
           {
-            if (val!) //TODO: zapisanie zmian
+            if (val!)
             {
               String newName = nameController.text;
               String newCount = countController.text;
@@ -90,7 +90,35 @@ class _ItemInfoPageState extends State<ItemInfoPage> {
             Padding(
                 padding: EdgeInsets.only(right: 20.0),
                 child: GestureDetector(
-                  onTap: () {}, //TODO: usuwanie elementu
+                  onTap: ()  {
+                    showDialog<bool>(
+                      context: context,
+                      builder: (BuildContext context) => AlertDialog(
+                        title: const Text('Czy usunąć element z listy?'),
+                        actions: [
+                          TextButton(
+                            onPressed: () {
+                              Navigator.pop(context, true);
+                            },
+                            child: const Text('Tak'),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              Navigator.pop(context, false);
+                            },
+                            child: const Text('Nie'),
+                          ),
+                        ],
+                      ),
+                    ).then((val) {
+                      {
+                        if (val!) {
+                          DatabaseService(uid: AuthService().uid).deleteItemFromList(widget.itemModel);
+                          Navigator.pop(context);
+                        }
+                      }
+                    });
+                  },
                   child: Icon(Icons.delete),
                 )),
           ],

@@ -44,8 +44,6 @@ class DatabaseService {
   }
 
   Future<void> replaceItem(ItemModel oldItem, ItemModel newItem) async {
-    print(oldItem);
-    print(newItem);
     await rootCollection
         .doc(uid)
         .collection('lists')
@@ -62,11 +60,52 @@ class DatabaseService {
     });
   }
 
-  //TODO: move list to trash
+  Future<void> renameList(String listID, String newName) async
+  {
+    await rootCollection
+        .doc(uid)
+        .collection('lists')
+        .doc(listID)
+        .update({'listName': newName});
+  }
 
-  //TODO: remove list from trash
+  Future<void> moveListToTrash(String listID) async {
+    await rootCollection
+        .doc(uid)
+        .collection('lists')
+        .doc(listID)
+        .update({'isTrashed': true});
+  }
 
-  //TODO: remove all lists from trash
+  Future<void> moveListFromTrash(String listID) async {
+    await rootCollection
+        .doc(uid)
+        .collection('lists')
+        .doc(listID)
+        .update({'isTrashed': false});
+  }
+
+  Future<void> deleteListFromTrash(String listID) async {
+    await rootCollection.doc(uid).collection('lists').doc(listID).delete();
+  }
+
+  //TODO: usuwanie wszystkich elementów
+
+  Future<void> deleteAllListsFromTrash() async {
+    await rootCollection.doc(uid).collection('lists').get().then((snapshot){
+      List<DocumentSnapshot> filteredDocs = snapshot.docs.where((document) => document.get('isTrashed') == true).toList();
+      for(DocumentSnapshot ds in filteredDocs)
+        {
+          ds.reference.delete();
+        }
+    });
+  }
+
+  Future<void> deleteItemFromList(ItemModel item) async {
+    await rootCollection.doc(uid).collection('lists').doc(item.listID).update({
+      'items': FieldValue.arrayRemove([item.item])
+    });
+  }
 
   List<ListModel> _getListsFromSnapshot(QuerySnapshot snapshot) {
     return snapshot.docs.map((doc) {
@@ -95,13 +134,13 @@ class DatabaseService {
     return lists.snapshots().map(_getListsFromSnapshot);
   }
 
-  List<ItemModel> getItems(String listID)
-  {
-    DocumentReference items = rootCollection.doc(uid).collection('lists').doc(listID);
+  List<ItemModel> getItems(String listID) {
+    DocumentReference items =
+        rootCollection.doc(uid).collection('lists').doc(listID);
 
     List<ItemModel> itemsList = [];
 
-   itemsList.sort((a,b) => a.itemName.compareTo(b.itemName));
+    itemsList.sort((a, b) => a.itemName.compareTo(b.itemName));
 
     return itemsList;
   }
