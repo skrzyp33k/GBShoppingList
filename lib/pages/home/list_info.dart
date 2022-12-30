@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:gb_shopping_list/main.dart';
 import 'package:gb_shopping_list/models/item.dart';
+import 'package:gb_shopping_list/props/units.dart';
 import 'package:gb_shopping_list/widgets/item_card.dart';
+import 'package:provider/provider.dart';
 
 class ListInfoPage extends StatefulWidget {
-  const ListInfoPage({Key? key, required this.listName, required this.items})
+  ListInfoPage({Key? key, required this.listName, required this.items})
       : super(key: key);
 
   final String listName;
 
-  final List<ItemModel> items;
+  late List<ItemModel> items;
 
   @override
   State<ListInfoPage> createState() => _ListInfoPageState();
@@ -18,11 +19,11 @@ class ListInfoPage extends StatefulWidget {
 
 class _ListInfoPageState extends State<ListInfoPage> {
 
-  String unit = units.first;
-
   @override
   Widget build(BuildContext context) {
     String listName = widget.listName;
+
+    String unit = Units().list.first;
 
     return Scaffold(
       appBar: AppBar(
@@ -87,7 +88,7 @@ class _ListInfoPageState extends State<ListInfoPage> {
                               ))),
                       DropdownButton<String>(
                           value: unit,
-                          items: units.map<DropdownMenuItem<String>>((String val) {
+                          items: Units().list.map<DropdownMenuItem<String>>((String val) {
                             return DropdownMenuItem<String>(
                               value: val,
                               child: Text(val),

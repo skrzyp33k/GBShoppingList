@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import 'package:gb_shopping_list/main.dart';
 import 'package:gb_shopping_list/models/item.dart';
+import 'package:gb_shopping_list/props/units.dart';
+import 'package:provider/provider.dart';
 
 class ItemInfoPage extends StatefulWidget {
   const ItemInfoPage({Key? key, required this.itemModel}) : super(key: key);
@@ -23,6 +24,8 @@ class _ItemInfoPageState extends State<ItemInfoPage> {
 
     nameController.text = item.itemName;
     countController.text = item.itemCount;
+
+    List<String> units = Units().list;
 
     return WillPopScope(
       onWillPop: () async {

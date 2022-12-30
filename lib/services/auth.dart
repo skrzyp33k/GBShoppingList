@@ -13,6 +13,10 @@ class AuthService {
         : null;
   }
 
+  String get uid {
+    return _auth.currentUser!.uid!;
+  }
+
   //auth change user stream
   Stream<UserModel?> get user {
     return _auth.authStateChanges().map(_createModel);

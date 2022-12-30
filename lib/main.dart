@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 import 'package:firebase_core/firebase_core.dart';
+import 'package:gb_shopping_list/models/list.dart';
+import 'package:gb_shopping_list/services/database.dart';
 import 'firebase_options.dart';
 
 import 'package:provider/provider.dart';
@@ -28,50 +30,48 @@ void main() async {
   runApp(GBSLApp());
 }
 
-List<String> units = <String>["szt", "kg", "l"];
-
 class GBSLApp extends StatelessWidget {
   GBSLApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-
-    //TODO: pobierz liste jednostek z bazy
-
-    return StreamProvider<UserModel?>.value(
-      value: AuthService().user,
-      initialData: null,
-      child: MaterialApp(
-          title: 'GB Shopping List',
-          theme: ThemeData(
-            colorScheme: const ColorScheme.light().copyWith(
-              primary: GbPalette.yellow,
-              secondary: GbPalette.yellow,
-              tertiary: Colors.white,
-              background: Colors.black,
-            ),
+    return MultiProvider(
+        providers: [
+          StreamProvider<UserModel?>.value(
+              value: AuthService().user, initialData: null),
+          StreamProvider<List<ListModel>>.value(
+              value: DatabaseService(uid: AuthService().uid).lists, initialData: []
           ),
-          darkTheme: ThemeData.dark().copyWith(
-            colorScheme: const ColorScheme.light().copyWith(
-              primary: GbPalette.yellow,
-              secondary: GbPalette.yellow,
-              tertiary: Colors.black,
-              background: Colors.white,
+        ],
+        child: MaterialApp(
+            title: 'GB Shopping List',
+            theme: ThemeData(
+              colorScheme: const ColorScheme.light().copyWith(
+                primary: GbPalette.yellow,
+                secondary: GbPalette.yellow,
+                tertiary: Colors.white,
+                background: Colors.black,
+              ),
             ),
-          ),
-          themeMode: ThemeMode.system,
-          debugShowCheckedModeBanner: false,
-          initialRoute: '/',
-          routes:{
-            '/': (context) => const Wrapper(),
-            '/start': (context) => const StartPage(),
-            '/login': (context) => const LoginPage(),
-            '/register': (context) => const RegisterPage(),
-            '/home': (context) => const HomePage(),
-            '/about': (context) => const AppInfo(),
-            '/settings': (context) => const AccountSettings(),
-          }
-      ),
-    );
+            darkTheme: ThemeData.dark().copyWith(
+              colorScheme: const ColorScheme.light().copyWith(
+                primary: GbPalette.yellow,
+                secondary: GbPalette.yellow,
+                tertiary: Colors.black,
+                background: Colors.white,
+              ),
+            ),
+            themeMode: ThemeMode.system,
+            debugShowCheckedModeBanner: false,
+            initialRoute: '/',
+            routes: {
+              '/': (context) => const Wrapper(),
+              '/start': (context) => const StartPage(),
+              '/login': (context) => const LoginPage(),
+              '/register': (context) => const RegisterPage(),
+              '/home': (context) => const HomePage(),
+              '/about': (context) => const AppInfo(),
+              '/settings': (context) => const AccountSettings(),
+            }));
   }
 }
