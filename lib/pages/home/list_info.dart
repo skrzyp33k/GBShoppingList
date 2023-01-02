@@ -32,22 +32,13 @@ class _ListInfoPageState extends State<ListInfoPage> {
         automaticallyImplyLeading: false,
         centerTitle: true,
       ),
-      body: RefreshIndicator(
-        onRefresh: () {
-          return Future.delayed(const Duration(seconds: 1), () {
-            setState(() {
-              //rawItems = //TODO: pobieranie listy
-            });
-          });
-        },
-        child: ListView.builder(
+      body: ListView.builder(
           padding: const EdgeInsets.all(5),
           itemCount: widget.items.length,
           itemBuilder: (BuildContext context, int index) {
             return Container(child: ItemCard(itemModel: widget.items[index]));
           },
         ),
-      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           TextEditingController nameController =

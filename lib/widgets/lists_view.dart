@@ -18,14 +18,13 @@ class ListsView extends StatefulWidget {
 class _ListsViewState extends State<ListsView> {
   @override
   Widget build(BuildContext context) {
-    List<ListModel> rawModels = Provider.of<List<ListModel>>(context) ?? [];
+    List<ListModel> rawModels = Provider.of<List<ListModel>>(context);
 
     List<ListCard> rawItems = <ListCard>[];
 
-    for(ListModel lm in rawModels)
-      {
-        rawItems.add(ListCard(listModel: lm));
-      }
+    for (ListModel lm in rawModels) {
+      rawItems.add(ListCard(listModel: lm));
+    }
 
     List<ListCard> activeLists = [];
     List<ListCard> finishedLists = [];
@@ -39,7 +38,8 @@ class _ListsViewState extends State<ListsView> {
         for (ItemModel i in li.listModel.listItems) {
           if (i.isChecked) checked++;
         }
-        if (checked >= li.listModel.listItems.length && li.listModel.listItems.isNotEmpty) {
+        if (checked >= li.listModel.listItems.length &&
+            li.listModel.listItems.isNotEmpty) {
           finishedLists.add(li);
         } else {
           activeLists.add(li);
@@ -48,53 +48,26 @@ class _ListsViewState extends State<ListsView> {
     }
 
     final List<Widget> tabsList = <Widget>[
-      RefreshIndicator(
-        onRefresh: () {
-          return Future.delayed(const Duration(seconds: 1), () {
-            setState(() {
-              //rawItems = //TODO: pobieranie listy
-            });
-          });
+      ListView.builder(
+        padding: const EdgeInsets.all(5),
+        itemCount: activeLists.length,
+        itemBuilder: (BuildContext context, int index) {
+          return Container(child: activeLists[index]);
         },
-        child: ListView.builder(
-          padding: const EdgeInsets.all(5),
-          itemCount: activeLists.length,
-          itemBuilder: (BuildContext context, int index) {
-            return Container(child: activeLists[index]);
-          },
-        ),
       ),
-      RefreshIndicator(
-        onRefresh: () {
-          return Future.delayed(const Duration(seconds: 1), () {
-            setState(() {
-              //rawItems = //TODO: pobieranie listy
-            });
-          });
+      ListView.builder(
+        padding: const EdgeInsets.all(5),
+        itemCount: finishedLists.length,
+        itemBuilder: (BuildContext context, int index) {
+          return Container(child: finishedLists[index]);
         },
-        child: ListView.builder(
-          padding: const EdgeInsets.all(5),
-          itemCount: finishedLists.length,
-          itemBuilder: (BuildContext context, int index) {
-            return Container(child: finishedLists[index]);
-          },
-        ),
       ),
-      RefreshIndicator(
-        onRefresh: () {
-          return Future.delayed(const Duration(seconds: 1), () {
-            setState(() {
-              //rawItems = //TODO: pobieranie listy
-            });
-          });
+      ListView.builder(
+        padding: const EdgeInsets.all(5),
+        itemCount: trashedLists.length,
+        itemBuilder: (BuildContext context, int index) {
+          return Container(child: trashedLists[index]);
         },
-        child: ListView.builder(
-          padding: const EdgeInsets.all(5),
-          itemCount: trashedLists.length,
-          itemBuilder: (BuildContext context, int index) {
-            return Container(child: trashedLists[index]);
-          },
-        ),
       ),
     ];
 

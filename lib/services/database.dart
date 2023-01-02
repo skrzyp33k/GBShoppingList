@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:gb_shopping_list/models/list.dart';
 import 'package:gb_shopping_list/models/item.dart';
 
@@ -14,14 +13,21 @@ class DatabaseService {
   List<ListModel> _getListsFromSnapshot(QuerySnapshot snapshot) {
     return snapshot.docs.map((doc) {
       List<ItemModel> items = [];
-      for(var item in doc['items'])
-        {
-          items.add(ItemModel(itemName: item['itemName'], itemCount: item['itemCount'], itemUnit: item['itemUnit'],itemInfo: item['itemInfo'], isChecked: item['isChecked']));
-        }
+      for (var item in doc['items']) {
+        items.add(ItemModel(
+            itemName: item['itemName'] ?? "",
+            itemCount: item['itemCount'] ?? "",
+            itemUnit: item['itemUnit'] ?? "szt",
+            itemInfo: item['itemInfo'] ?? "",
+            isChecked: item['isChecked'] ?? false,
+            listID: doc.id));
+      }
       return ListModel(
-          listName: doc['listName'] ?? "",
-          isTrashed: doc['isTrashed'] ?? "",
-          listItems: items);
+        listName: doc['listName'] ?? "",
+        isTrashed: doc['isTrashed'] ?? "",
+        listItems: items,
+        ID: doc.id,
+      );
     }).toList();
   }
 
@@ -30,5 +36,4 @@ class DatabaseService {
 
     return lists.snapshots().map(_getListsFromSnapshot);
   }
-
 }

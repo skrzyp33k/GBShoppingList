@@ -27,11 +27,11 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(GBSLApp());
+  runApp(const GBSLApp());
 }
 
 class GBSLApp extends StatelessWidget {
-  GBSLApp({super.key});
+  const GBSLApp({super.key});
 
   @override
   Widget build(BuildContext context) {

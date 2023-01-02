@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 
 import 'package:gb_shopping_list/models/item.dart';
 import 'package:gb_shopping_list/props/units.dart';
-import 'package:provider/provider.dart';
 
 class ItemInfoPage extends StatefulWidget {
   const ItemInfoPage({Key? key, required this.itemModel}) : super(key: key);
@@ -72,7 +71,7 @@ class _ItemInfoPageState extends State<ItemInfoPage> {
           children: [
             Row(
               children: [
-                Text("Nazwa:"),
+                const Text("Nazwa:"),
                 Expanded(child: TextField(
                   controller: nameController,
                 )),
@@ -82,24 +81,23 @@ class _ItemInfoPageState extends State<ItemInfoPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Text("Ilość:"),
+                const Text("Ilość:"),
                 Expanded(
-                    child: Container(
-                        child: TextField(
-                          controller: countController,
+                    child: TextField(
+                      controller: countController,
                   keyboardType: TextInputType.number,
                   inputFormatters: <TextInputFormatter>[
                     FilteringTextInputFormatter.allow(RegExp(r"[0-9.]")),
                     TextInputFormatter.withFunction((oldValue, newValue) {
                       try {
-                        final text = newValue.text;
-                        if (text.isNotEmpty) double.parse(text);
-                        return newValue;
+                    final text = newValue.text;
+                    if (text.isNotEmpty) double.parse(text);
+                    return newValue;
                       } catch (e) {}
                       return oldValue;
                     }),
                   ],
-                ))),
+                )),
                 DropdownButton<String>(
                     value: item.itemUnit,
                     items: units.map<DropdownMenuItem<String>>((String val) {
@@ -115,7 +113,7 @@ class _ItemInfoPageState extends State<ItemInfoPage> {
                     })
               ],
             ),
-            Text('Dodatkowe informacje:'),
+            const Text('Dodatkowe informacje:'),
             TextField(
               controller: infoController,
               keyboardType: TextInputType.multiline,
@@ -128,11 +126,11 @@ class _ItemInfoPageState extends State<ItemInfoPage> {
               children: [
                 TextButton(
                   onPressed: () {},
-                  child: Text('Zrób zdjęcie'),
+                  child: const Text('Zrób zdjęcie'),
                 ),
                 TextButton(
                   onPressed: () {},
-                  child: Text('Dodaj zdjęcie'),
+                  child: const Text('Dodaj zdjęcie'),
                 ),
               ],
             ),

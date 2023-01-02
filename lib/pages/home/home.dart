@@ -4,7 +4,6 @@ import 'package:gb_shopping_list/widgets/lists_view.dart';
 import 'package:move_to_background/move_to_background.dart';
 
 import 'package:gb_shopping_list/widgets/drawer.dart';
-import 'package:provider/provider.dart';
 
 
 class HomePage extends StatefulWidget {
@@ -77,8 +76,8 @@ class _HomePageState extends State<HomePage> {
             }
           });
         },
-        child: const Icon(Icons.add),
         foregroundColor: Theme.of(context).colorScheme.tertiary,
+        child: const Icon(Icons.add),
       ),
       null,
       FloatingActionButton(

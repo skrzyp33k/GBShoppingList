@@ -14,7 +14,7 @@ class AuthService {
   }
 
   String get uid {
-    return _auth.currentUser!.uid!;
+    return _auth.currentUser!.uid;
   }
 
   //auth change user stream
