@@ -1,4 +1,4 @@
-class ItemModel{
+class ItemModel {
   String itemName;
   String itemCount;
   String itemUnit;
@@ -6,5 +6,11 @@ class ItemModel{
   bool isChecked;
   final String listID;
 
-  ItemModel({required this.listID, required this.itemName, required this.itemCount, required this.itemUnit, required this.isChecked, this.itemInfo = ""});
+  ItemModel(
+      {required this.listID,
+      required this.itemName,
+      required this.itemCount,
+      required this.itemUnit,
+      required this.isChecked,
+      this.itemInfo = ""});
 }

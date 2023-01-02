@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:gb_shopping_list/pages/home/item_info.dart';
-
 import 'package:gb_shopping_list/models/item.dart';
+import 'package:gb_shopping_list/pages/home/item_info.dart';
 
 class ItemCard extends StatefulWidget {
   const ItemCard({Key? key, required this.itemModel}) : super(key: key);

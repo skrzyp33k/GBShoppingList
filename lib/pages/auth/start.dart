@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'package:move_to_background/move_to_background.dart';
 
 class StartPage extends StatefulWidget {

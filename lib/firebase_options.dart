@@ -67,7 +67,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '1039033999834',
     projectId: 'gbshoppinglist-def4a',
     storageBucket: 'gbshoppinglist-def4a.appspot.com',
-    iosClientId: '1039033999834-4dptr09n0hsmqtnhr7bo3e175g50u5l7.apps.googleusercontent.com',
+    iosClientId:
+        '1039033999834-4dptr09n0hsmqtnhr7bo3e175g50u5l7.apps.googleusercontent.com',
     iosBundleId: 'pl.skrzyp33k.gbShoppingList',
   );
 
@@ -77,7 +78,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '1039033999834',
     projectId: 'gbshoppinglist-def4a',
     storageBucket: 'gbshoppinglist-def4a.appspot.com',
-    iosClientId: '1039033999834-4dptr09n0hsmqtnhr7bo3e175g50u5l7.apps.googleusercontent.com',
+    iosClientId:
+        '1039033999834-4dptr09n0hsmqtnhr7bo3e175g50u5l7.apps.googleusercontent.com',
     iosBundleId: 'pl.skrzyp33k.gbShoppingList',
   );
 }

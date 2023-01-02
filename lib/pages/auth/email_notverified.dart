@@ -1,7 +1,8 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
-import 'package:move_to_background/move_to_background.dart';
 import 'package:gb_shopping_list/services/auth.dart';
+import 'package:move_to_background/move_to_background.dart';
 
 class VerifyEmail extends StatefulWidget {
   const VerifyEmail({Key? key}) : super(key: key);

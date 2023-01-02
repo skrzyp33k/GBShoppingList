@@ -1,10 +1,7 @@
-import 'package:flutter/material.dart';
-
 import 'package:email_validator/email_validator.dart';
-
-import 'package:gb_shopping_list/services/auth.dart';
-
+import 'package:flutter/material.dart';
 import 'package:gb_shopping_list/models/user.dart';
+import 'package:gb_shopping_list/services/auth.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -102,8 +99,8 @@ class _LoginPageState extends State<LoginPage> {
                               context: context,
                               builder: (BuildContext context) => AlertDialog(
                                 title: const Text('Błąd logowania!'),
-                                content:
-                                    const Text('Niewystarczające dane logowania!'),
+                                content: const Text(
+                                    'Niewystarczające dane logowania!'),
                                 actions: [
                                   TextButton(
                                     onPressed: () =>
@@ -123,7 +120,8 @@ class _LoginPageState extends State<LoginPage> {
                               context: context,
                               builder: (BuildContext context) => AlertDialog(
                                 title: const Text('Błąd logowania!'),
-                                content: const Text('Niepoprawny adres e-mail!'),
+                                content:
+                                    const Text('Niepoprawny adres e-mail!'),
                                 actions: [
                                   TextButton(
                                     onPressed: () =>
@@ -146,7 +144,8 @@ class _LoginPageState extends State<LoginPage> {
                               context: context,
                               builder: (BuildContext context) => AlertDialog(
                                 title: const Text('Błąd logowania!'),
-                                content: const Text('Nieprawidłowe dane logowania!'),
+                                content:
+                                    const Text('Nieprawidłowe dane logowania!'),
                                 actions: [
                                   TextButton(
                                     onPressed: () =>
@@ -220,7 +219,8 @@ class _LoginPageState extends State<LoginPage> {
                             if (email.isNotEmpty) {
                               _auth.instance
                                   .sendPasswordResetEmail(email: email);
-                              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(const SnackBar(
                                 content: Text("Wysłano e-mail"),
                               ));
                             }

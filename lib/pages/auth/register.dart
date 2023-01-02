@@ -1,7 +1,5 @@
-import 'package:flutter/material.dart';
-
 import 'package:email_validator/email_validator.dart';
-
+import 'package:flutter/material.dart';
 import 'package:gb_shopping_list/services/auth.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -119,8 +117,8 @@ class _RegisterPageState extends State<RegisterPage> {
                               context: context,
                               builder: (BuildContext context) => AlertDialog(
                                 title: const Text('Błąd rejestracji!'),
-                                content:
-                                    const Text('Niewystarczające dane rejestracji!'),
+                                content: const Text(
+                                    'Niewystarczające dane rejestracji!'),
                                 actions: [
                                   TextButton(
                                     onPressed: () =>
@@ -140,7 +138,8 @@ class _RegisterPageState extends State<RegisterPage> {
                               context: context,
                               builder: (BuildContext context) => AlertDialog(
                                 title: const Text('Błąd logowania!'),
-                                content: const Text('Niepoprawny adres e-mail!'),
+                                content:
+                                    const Text('Niepoprawny adres e-mail!'),
                                 actions: [
                                   TextButton(
                                     onPressed: () =>
@@ -178,12 +177,13 @@ class _RegisterPageState extends State<RegisterPage> {
                               email: login, password: pass);
 
                           if (result == null) //error
-                              {
+                          {
                             showDialog<String>(
                               context: context,
                               builder: (BuildContext context) => AlertDialog(
                                 title: const Text('Błąd rejestracji!'),
-                                content: const Text('Podczas rejestracji wystąpił błąd!'),
+                                content: const Text(
+                                    'Podczas rejestracji wystąpił błąd!'),
                                 actions: [
                                   TextButton(
                                     onPressed: () =>

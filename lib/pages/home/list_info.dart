@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:gb_shopping_list/models/item.dart';
 import 'package:gb_shopping_list/props/units.dart';
 import 'package:gb_shopping_list/widgets/item_card.dart';
-import 'package:provider/provider.dart';
 
 class ListInfoPage extends StatefulWidget {
   ListInfoPage({Key? key, required this.listName, required this.items})
@@ -18,7 +17,6 @@ class ListInfoPage extends StatefulWidget {
 }
 
 class _ListInfoPageState extends State<ListInfoPage> {
-
   @override
   Widget build(BuildContext context) {
     String listName = widget.listName;
@@ -33,16 +31,15 @@ class _ListInfoPageState extends State<ListInfoPage> {
         centerTitle: true,
       ),
       body: ListView.builder(
-          padding: const EdgeInsets.all(5),
-          itemCount: widget.items.length,
-          itemBuilder: (BuildContext context, int index) {
-            return Container(child: ItemCard(itemModel: widget.items[index]));
-          },
-        ),
+        padding: const EdgeInsets.all(5),
+        itemCount: widget.items.length,
+        itemBuilder: (BuildContext context, int index) {
+          return Container(child: ItemCard(itemModel: widget.items[index]));
+        },
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          TextEditingController nameController =
-          TextEditingController();
+          TextEditingController nameController = TextEditingController();
           showDialog<String>(
             context: context,
             builder: (BuildContext context) => AlertDialog(
@@ -64,22 +61,24 @@ class _ListInfoPageState extends State<ListInfoPage> {
                       Expanded(
                           child: Container(
                               child: TextField(
-                                keyboardType: TextInputType.number,
-                                inputFormatters: <TextInputFormatter>[
-                                  FilteringTextInputFormatter.allow(RegExp(r"[0-9.]")),
-                                  TextInputFormatter.withFunction((oldValue, newValue) {
-                                    try {
-                                      final text = newValue.text;
-                                      if (text.isNotEmpty) double.parse(text);
-                                      return newValue;
-                                    } catch (e) {}
-                                    return oldValue;
-                                  }),
-                                ],
-                              ))),
+                        keyboardType: TextInputType.number,
+                        inputFormatters: <TextInputFormatter>[
+                          FilteringTextInputFormatter.allow(RegExp(r"[0-9.]")),
+                          TextInputFormatter.withFunction((oldValue, newValue) {
+                            try {
+                              final text = newValue.text;
+                              if (text.isNotEmpty) double.parse(text);
+                              return newValue;
+                            } catch (e) {}
+                            return oldValue;
+                          }),
+                        ],
+                      ))),
                       DropdownButton<String>(
                           value: unit,
-                          items: Units().list.map<DropdownMenuItem<String>>((String val) {
+                          items: Units()
+                              .list
+                              .map<DropdownMenuItem<String>>((String val) {
                             return DropdownMenuItem<String>(
                               value: val,
                               child: Text(val),
@@ -115,9 +114,7 @@ class _ListInfoPageState extends State<ListInfoPage> {
           ).then((val) {
             String name = val!.trim();
             {
-              if (name.isNotEmpty) {
-
-              }
+              if (name.isNotEmpty) {}
             }
           });
         },

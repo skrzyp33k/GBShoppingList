@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:gb_shopping_list/models/list.dart';
 import 'package:gb_shopping_list/models/item.dart';
+import 'package:gb_shopping_list/models/list.dart';
 
 class DatabaseService {
   final String uid;

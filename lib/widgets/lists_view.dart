@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gb_shopping_list/models/item.dart';
 import 'package:gb_shopping_list/models/list.dart';
-import 'package:gb_shopping_list/services/auth.dart';
-import 'package:gb_shopping_list/services/database.dart';
 import 'package:gb_shopping_list/widgets/list_card.dart';
 import 'package:provider/provider.dart';
 

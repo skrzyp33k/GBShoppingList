@@ -37,8 +37,7 @@ class _AccountSettingsState extends State<AccountSettings> {
               child: ElevatedButton.icon(
                 onPressed: () {
                   String email = auth.instance.currentUser!.email!;
-                  auth.instance
-                      .sendPasswordResetEmail(email: email);
+                  auth.instance.sendPasswordResetEmail(email: email);
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                     content: Text("Wysłano e-mail na adres $email"),
                   ));

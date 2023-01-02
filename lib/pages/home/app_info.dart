@@ -63,7 +63,8 @@ class _AppInfoState extends State<AppInfo> {
                       )),
                 ),
                 Image.asset(
-                  SchedulerBinding.instance.window.platformBrightness == Brightness.dark
+                  SchedulerBinding.instance.window.platformBrightness ==
+                          Brightness.dark
                       ? 'assets/skrzyp33k_black.png'
                       : 'assets/skrzyp33k_white.png',
                   fit: BoxFit.cover,

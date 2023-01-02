@@ -1,26 +1,20 @@
-import 'package:flutter/material.dart';
-
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/material.dart';
 import 'package:gb_shopping_list/models/list.dart';
-import 'package:gb_shopping_list/services/database.dart';
-import 'firebase_options.dart';
-
-import 'package:provider/provider.dart';
-
 import 'package:gb_shopping_list/models/user.dart';
-
-import 'package:gb_shopping_list/services/auth.dart';
-
-import 'package:gb_shopping_list/pages/wrapper.dart';
-
-import 'package:gb_shopping_list/pages/auth/start.dart';
 import 'package:gb_shopping_list/pages/auth/login.dart';
 import 'package:gb_shopping_list/pages/auth/register.dart';
-import 'package:gb_shopping_list/pages/home/home.dart';
+import 'package:gb_shopping_list/pages/auth/start.dart';
 import 'package:gb_shopping_list/pages/home/account_settings.dart';
 import 'package:gb_shopping_list/pages/home/app_info.dart';
-
+import 'package:gb_shopping_list/pages/home/home.dart';
+import 'package:gb_shopping_list/pages/wrapper.dart';
 import 'package:gb_shopping_list/props/palette.dart';
+import 'package:gb_shopping_list/services/auth.dart';
+import 'package:gb_shopping_list/services/database.dart';
+import 'package:provider/provider.dart';
+
+import 'firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -40,8 +34,8 @@ class GBSLApp extends StatelessWidget {
           StreamProvider<UserModel?>.value(
               value: AuthService().user, initialData: null),
           StreamProvider<List<ListModel>>.value(
-              value: DatabaseService(uid: AuthService().uid).lists, initialData: []
-          ),
+              value: DatabaseService(uid: AuthService().uid).lists,
+              initialData: []),
         ],
         child: MaterialApp(
             title: 'GB Shopping List',

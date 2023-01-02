@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
 import 'package:gb_shopping_list/models/item.dart';
 import 'package:gb_shopping_list/props/units.dart';
 
@@ -72,7 +71,8 @@ class _ItemInfoPageState extends State<ItemInfoPage> {
             Row(
               children: [
                 const Text("Nazwa:"),
-                Expanded(child: TextField(
+                Expanded(
+                    child: TextField(
                   controller: nameController,
                 )),
               ],
@@ -84,15 +84,15 @@ class _ItemInfoPageState extends State<ItemInfoPage> {
                 const Text("Ilość:"),
                 Expanded(
                     child: TextField(
-                      controller: countController,
+                  controller: countController,
                   keyboardType: TextInputType.number,
                   inputFormatters: <TextInputFormatter>[
                     FilteringTextInputFormatter.allow(RegExp(r"[0-9.]")),
                     TextInputFormatter.withFunction((oldValue, newValue) {
                       try {
-                    final text = newValue.text;
-                    if (text.isNotEmpty) double.parse(text);
-                    return newValue;
+                        final text = newValue.text;
+                        if (text.isNotEmpty) double.parse(text);
+                        return newValue;
                       } catch (e) {}
                       return oldValue;
                     }),
