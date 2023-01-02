@@ -89,8 +89,6 @@ class DatabaseService {
     await rootCollection.doc(uid).collection('lists').doc(listID).delete();
   }
 
-  //TODO: usuwanie wszystkich elementów
-
   Future<void> deleteAllListsFromTrash() async {
     await rootCollection.doc(uid).collection('lists').get().then((snapshot){
       List<DocumentSnapshot> filteredDocs = snapshot.docs.where((document) => document.get('isTrashed') == true).toList();
