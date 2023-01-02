@@ -39,7 +39,7 @@ class _ListCardState extends State<ListCard> {
               context,
               MaterialPageRoute(
                   builder: (context) =>
-                      ListInfoPage(listName: listName, items: list.listItems))),
+                      ListInfoPage(listName: listName, items: list.listItems, listID: list.ID))),
       child: Container(
         constraints: const BoxConstraints(minWidth: 100, maxWidth: 200),
         margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 5),

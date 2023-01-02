@@ -1,24 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:gb_shopping_list/models/item.dart';
 import 'package:gb_shopping_list/pages/home/item_info.dart';
+import 'package:gb_shopping_list/services/auth.dart';
+import 'package:gb_shopping_list/services/database.dart';
 
 class ItemCard extends StatefulWidget {
-  const ItemCard({Key? key, required this.itemModel}) : super(key: key);
+  ItemCard({Key? key, required this.itemModel}) : super(key: key);
 
-  final ItemModel itemModel;
+  late ItemModel itemModel;
 
   @override
   State<ItemCard> createState() => _ItemCardState();
 }
 
 class _ItemCardState extends State<ItemCard> {
-  late bool isChecked;
-
-  @protected
-  @mustCallSuper
-  void initState() {
-    isChecked = widget.itemModel.isChecked;
-  }
+  late List<ItemModel> result;
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +26,10 @@ class _ItemCardState extends State<ItemCard> {
       onTap: () => Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) => ItemInfoPage(itemModel: widget.itemModel))),
+              builder: (context) {
+                ItemInfoPage itemInfoPage = ItemInfoPage(itemModel: widget.itemModel);
+                return itemInfoPage;
+              } )),
       child: Container(
         constraints: const BoxConstraints(minWidth: 100, maxWidth: 200),
         margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
@@ -83,7 +82,7 @@ class _ItemCardState extends State<ItemCard> {
               ],
             )),
             Checkbox(
-                value: isChecked,
+                value: widget.itemModel.isChecked,
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(5)),
                 checkColor: Theme.of(context).colorScheme.background,
@@ -91,8 +90,9 @@ class _ItemCardState extends State<ItemCard> {
                     (states) => Theme.of(context).colorScheme.tertiary),
                 onChanged: (val) {
                   setState(() {
-                    isChecked = val!;
+                    widget.itemModel.isChecked = val!;
                   });
+                  DatabaseService(uid: AuthService().uid).setCheckBox(widget.itemModel);
                 }),
           ],
         ),

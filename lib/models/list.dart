@@ -2,7 +2,7 @@ import 'package:gb_shopping_list/models/item.dart';
 
 class ListModel {
   ListModel(
-      {required this.ID,
+      {this.ID = "",
       required this.listName,
       required this.listItems,
       required this.isTrashed});
@@ -10,5 +10,5 @@ class ListModel {
   String listName;
   List<ItemModel> listItems;
   bool isTrashed;
-  final String ID;
+  String ID;
 }

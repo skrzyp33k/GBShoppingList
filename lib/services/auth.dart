@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:gb_shopping_list/models/user.dart';
+import 'package:gb_shopping_list/services/database.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -13,8 +14,8 @@ class AuthService {
         : null;
   }
 
-  String get uid {
-    return _auth.currentUser!.uid;
+  String? get uid {
+    return _auth.currentUser?.uid;
   }
 
   //auth change user stream
@@ -40,6 +41,7 @@ class AuthService {
           email: email, password: password);
       User? user = result.user;
       sendEmailVerification();
+      DatabaseService(uid: user!.uid).addNewUser();
       return _createModel(user);
     } catch (ex) {
       return null;

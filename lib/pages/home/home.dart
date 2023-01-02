@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:gb_shopping_list/models/list.dart';
+import 'package:gb_shopping_list/services/auth.dart';
+import 'package:gb_shopping_list/services/database.dart';
 import 'package:gb_shopping_list/widgets/drawer.dart';
 import 'package:gb_shopping_list/widgets/lists_view.dart';
 import 'package:move_to_background/move_to_background.dart';
@@ -68,7 +71,8 @@ class _HomePageState extends State<HomePage> {
             String name = val!.trim();
             {
               if (name.isNotEmpty) {
-                //TODO: dodawanie listy
+                ListModel newList = ListModel(listName: name, isTrashed: false, listItems: []);
+                DatabaseService(uid: AuthService().uid).addNewList(newList);
               }
             }
           });

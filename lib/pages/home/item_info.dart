@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gb_shopping_list/models/item.dart';
+import 'package:gb_shopping_list/pages/home/list_info.dart';
 import 'package:gb_shopping_list/props/units.dart';
+import 'package:gb_shopping_list/services/auth.dart';
+import 'package:gb_shopping_list/services/database.dart';
 
 class ItemInfoPage extends StatefulWidget {
-  const ItemInfoPage({Key? key, required this.itemModel}) : super(key: key);
+  ItemInfoPage({Key? key, required this.itemModel}) : super(key: key);
 
   final ItemModel itemModel;
+
+  late ListInfoPage listInfoPage;
 
   @override
   State<ItemInfoPage> createState() => _ItemInfoPageState();
@@ -24,6 +29,8 @@ class _ItemInfoPageState extends State<ItemInfoPage> {
     nameController.text = item.itemName;
     countController.text = item.itemCount;
     infoController.text = item.itemInfo;
+
+    String unit = item.itemUnit;
 
     List<String> units = Units().list;
 
@@ -51,7 +58,22 @@ class _ItemInfoPageState extends State<ItemInfoPage> {
         ).then((val) {
           {
             if (val!) //TODO: zapisanie zmian
-            {}
+            {
+              String newName = nameController.text;
+              String newCount = countController.text;
+              String newInfo = infoController.text;
+              String newUnit = unit;
+              ItemModel newItem = ItemModel(
+                  itemName: newName,
+                  itemCount: newCount,
+                  itemUnit: newUnit,
+                  itemInfo: newInfo,
+                  isChecked: item.isChecked,
+                  listID: item.listID);
+              DatabaseService(uid: AuthService().uid)
+                  .replaceItem(item, newItem);
+              item = newItem;
+            }
             Navigator.pop(context);
             return true;
           }
@@ -64,6 +86,14 @@ class _ItemInfoPageState extends State<ItemInfoPage> {
           foregroundColor: Theme.of(context).colorScheme.tertiary,
           automaticallyImplyLeading: false,
           centerTitle: true,
+          actions: <Widget>[
+            Padding(
+                padding: EdgeInsets.only(right: 20.0),
+                child: GestureDetector(
+                  onTap: () {}, //TODO: usuwanie elementu
+                  child: Icon(Icons.delete),
+                )),
+          ],
         ),
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -99,7 +129,7 @@ class _ItemInfoPageState extends State<ItemInfoPage> {
                   ],
                 )),
                 DropdownButton<String>(
-                    value: item.itemUnit,
+                    value: unit,
                     items: units.map<DropdownMenuItem<String>>((String val) {
                       return DropdownMenuItem<String>(
                         value: val,
@@ -108,7 +138,7 @@ class _ItemInfoPageState extends State<ItemInfoPage> {
                     }).toList(),
                     onChanged: (String? val) {
                       setState(() {
-                        item.itemUnit = val!;
+                        unit = val!;
                       });
                     })
               ],

@@ -44,7 +44,7 @@ class GBSLApp extends StatelessWidget {
                 primary: GbPalette.yellow,
                 secondary: GbPalette.yellow,
                 tertiary: Colors.white,
-                background: Colors.black,
+                background: Colors.white,
               ),
             ),
             darkTheme: ThemeData.dark().copyWith(
@@ -52,7 +52,7 @@ class GBSLApp extends StatelessWidget {
                 primary: GbPalette.yellow,
                 secondary: GbPalette.yellow,
                 tertiary: Colors.black,
-                background: Colors.white,
+                background: Colors.black,
               ),
             ),
             themeMode: ThemeMode.system,

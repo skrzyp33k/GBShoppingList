@@ -28,6 +28,8 @@ class _ListsViewState extends State<ListsView> {
     List<ListCard> finishedLists = [];
     List<ListCard> trashedLists = [];
 
+    rawItems.sort((a,b) => a.listModel.listName.compareTo(b.listModel.listName));
+
     for (ListCard li in rawItems) {
       if (li.listModel.isTrashed) {
         trashedLists.add(li);
