@@ -161,6 +161,7 @@ class _ListInfoPageState extends State<ListInfoPage> {
                 itemName: item['itemName'],
                 itemCount: item['itemCount'],
                 itemUnit: item['itemUnit'],
+                itemBarcode: item['itemBarcode'],
                 isChecked: item['isChecked'],
                 itemInfo: item['itemInfo'],
                 listID: widget.listID));

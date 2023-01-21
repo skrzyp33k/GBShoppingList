@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:gb_shopping_list/models/item.dart';
-import 'package:gb_shopping_list/pages/home/list_info.dart';
 import 'package:gb_shopping_list/props/units.dart';
 import 'package:gb_shopping_list/services/auth.dart';
 import 'package:gb_shopping_list/services/database.dart';
@@ -12,15 +11,13 @@ class ItemInfoPage extends StatefulWidget {
 
   final ItemModel itemModel;
 
-  late ListInfoPage listInfoPage;
-
   @override
   State<ItemInfoPage> createState() => _ItemInfoPageState();
 }
 
 class _ItemInfoPageState extends State<ItemInfoPage> {
 
-  ItemModel? oldItem;
+  ItemModel? _oldItem;
   
   String _barcode = "";
   
@@ -32,7 +29,9 @@ class _ItemInfoPageState extends State<ItemInfoPage> {
   Widget build(BuildContext context) {
     ItemModel item = widget.itemModel;
 
-    oldItem ??= ItemModel(itemName: item.itemName, itemCount: item.itemCount, itemUnit: item.itemUnit, isChecked: item.isChecked, itemInfo: item.itemInfo, listID: item.listID);
+    print(item.item);
+
+    _oldItem ??= ItemModel(itemName: item.itemName, itemCount: item.itemCount, itemUnit: item.itemUnit, itemBarcode: item.itemBarcode, isChecked: item.isChecked, itemInfo: item.itemInfo, listID: item.listID);
 
     TextEditingController nameController = TextEditingController();
     TextEditingController countController = TextEditingController();
@@ -85,10 +84,12 @@ class _ItemInfoPageState extends State<ItemInfoPage> {
                   itemCount: newCount,
                   itemUnit: newUnit,
                   itemInfo: newInfo,
+                  itemBarcode: item.itemBarcode,
                   isChecked: item.isChecked,
                   listID: item.listID);
+              ItemModel oldItemModel = ItemModel(itemName: item.itemName, itemCount: item.itemCount, itemUnit: _oldItem!.itemUnit, itemBarcode: item.itemBarcode, isChecked: item.isChecked, itemInfo: item.itemInfo, listID: item.listID);
               DatabaseService(uid: AuthService().uid)
-                  .replaceItem(oldItem!, newItem);
+                  .replaceItem(oldItemModel, newItem);
             }
             Navigator.pop(context);
             return true;
@@ -140,120 +141,127 @@ class _ItemInfoPageState extends State<ItemInfoPage> {
           ],
         ),
         body: SafeArea(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Row(
-                children: [
-                  const Text("Nazwa:"),
-                  Expanded(
-                      child: TextField(
-                        controller: nameController,
-                      )),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const Text("Ilość:"),
-                  Expanded(
-                      child: TextField(
-                        controller: countController,
-                        keyboardType: TextInputType.number,
-                        inputFormatters: <TextInputFormatter>[
-                          FilteringTextInputFormatter.allow(RegExp(r"[0-9.]")),
-                          TextInputFormatter.withFunction((oldValue, newValue) {
-                            try {
-                              final text = newValue.text;
-                              if (text.isNotEmpty) double.parse(text);
-                              return newValue;
-                            } catch (e) {}
-                            return oldValue;
-                          }),
-                        ],
-                      )),
-                  DropdownButton<String>(
-                      value: unit,
-                      items: units.map<DropdownMenuItem<String>>((String val) {
-                        return DropdownMenuItem<String>(
-                          value: val,
-                          child: Text(val),
-                        );
-                      }).toList(),
-                      onChanged: (String? val) {
-                        setState(() {
-                          item.itemUnit = val!;
-                        });
-                      })
-                ],
-              ),
-              const Text('Dodatkowe informacje:'),
-              TextField(
-                controller: infoController,
-                keyboardType: TextInputType.multiline,
-                minLines: 1, //Normal textInputField will be displayed
-                maxLines: 5, // when user presses enter it will adapt to it
-              ),
-              const Text('Kod kreskowy:'),
-              Text(item.itemBarcode),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  OutlinedButton(onPressed: () async{
-                    await _scan();
-                    setState(() {
-                      item.itemBarcode = _barcode;
-                    });
-                    DatabaseService(uid: AuthService().uid)
-                        .replaceItem(oldItem!, item);
-                  }, child: item.itemBarcode.isEmpty ? const Text('Dodaj kod kreskowy') : const Text('Zmień kod kreskowy')),
-                  OutlinedButton(onPressed: () async{
-                    await _scan();
-                    if(_barcode == "-1")
-                      {
-                        setState((){_barcode = "";});
-                      }
-                    else if(_barcode == item.itemBarcode)
-                      {
-                        showDialog<String>(
-                          context: context,
-                          builder: (BuildContext context) => AlertDialog(
-                            title: const Text('Wynik skanowania'),
-                            content: const Text(
-                                'Ten sam produkt!'),
-                            actions: [
-                              TextButton(
-                                onPressed: () =>
-                                    Navigator.pop(context, 'OK'),
-                                child: const Text('OK'),
-                              ),
-                            ],
-                          ),
-                        );
-                      }
-                    else
-                      {
-                        showDialog<String>(
-                          context: context,
-                          builder: (BuildContext context) => AlertDialog(
-                            title: const Text('Wynik skanowania'),
-                            content: const Text(
-                                'Inny produkt!'),
-                            actions: [
-                              TextButton(
-                                onPressed: () =>
-                                    Navigator.pop(context, 'OK'),
-                                child: const Text('OK'),
-                              ),
-                            ],
-                          ),
-                        );
-                      }
-                  }, child: Text('Sprawdź kod kreskowy')),
-                ],
-              ),
-            ],
+          child: Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Row(
+                  children: [
+                    const Text("Nazwa:"),
+                    Expanded(
+                        child: TextField(
+                          textAlign: TextAlign.center,
+                          controller: nameController,
+                        )),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const Text("Ilość:"),
+                    Expanded(
+                        child: TextField(
+                          textAlign: TextAlign.center,
+                          controller: countController,
+                          keyboardType: TextInputType.number,
+                          inputFormatters: <TextInputFormatter>[
+                            FilteringTextInputFormatter.allow(RegExp(r"[0-9.]")),
+                            TextInputFormatter.withFunction((oldValue, newValue) {
+                              try {
+                                final text = newValue.text;
+                                if (text.isNotEmpty) double.parse(text);
+                                return newValue;
+                              } catch (e) {}
+                              return oldValue;
+                            }),
+                          ],
+                        )),
+                    DropdownButton<String>(
+                        value: unit,
+                        items: units.map<DropdownMenuItem<String>>((String val) {
+                          return DropdownMenuItem<String>(
+                            value: val,
+                            child: Text(val),
+                          );
+                        }).toList(),
+                        onChanged: (String? val) {
+                          setState(() {
+                            item.itemUnit = val!;
+                          });
+                        })
+                  ],
+                ),
+                const Text('Dodatkowe informacje:'),
+                TextField(
+                  textAlign: TextAlign.center,
+                  controller: infoController,
+                  keyboardType: TextInputType.multiline,
+                  minLines: 1, //Normal textInputField will be displayed
+                  maxLines: 5, // when user presses enter it will adapt to it
+                ),
+                const Text('Kod kreskowy:'),
+                Text(item.itemBarcode),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    OutlinedButton(onPressed: () async{
+                      await _scan();
+                      setState(() {
+                        item.itemBarcode = _barcode;
+                      });
+                      DatabaseService(uid: AuthService().uid)
+                          .replaceItem(_oldItem!, item);
+                    }, child: item.itemBarcode.isEmpty ? const Text('Dodaj kod kreskowy') : const Text('Zmień kod kreskowy')),
+                    OutlinedButton(onPressed: () async{
+                      await _scan();
+                      if(_barcode == "-1")
+                        {
+                          setState((){_barcode = "";});
+                        }
+                      else if(_barcode == item.itemBarcode)
+                        {
+                          showDialog<String>(
+                            context: context,
+                            builder: (BuildContext context) => AlertDialog(
+                              title: const Text('Wynik skanowania'),
+                              content: const Text(
+                                  'Ten sam produkt!'),
+                              actions: [
+                                TextButton(
+                                  onPressed: () =>
+                                      Navigator.pop(context, 'OK'),
+                                  child: const Text('OK'),
+                                ),
+                              ],
+                            ),
+                          );
+                        }
+                      else
+                        {
+                          showDialog<String>(
+                            context: context,
+                            builder: (BuildContext context) => AlertDialog(
+                              title: const Text('Wynik skanowania'),
+                              content: const Text(
+                                  'Inny produkt!'),
+                              actions: [
+                                TextButton(
+                                  onPressed: () =>
+                                      Navigator.pop(context, 'OK'),
+                                  child: const Text('OK'),
+                                ),
+                              ],
+                            ),
+                          );
+                        }
+                    }, child: Text('Sprawdź kod kreskowy')),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),
