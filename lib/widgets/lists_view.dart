@@ -70,7 +70,6 @@ class _ListsViewState extends State<ListsView> {
         },
       ),
     ];
-
     return tabsList[widget.pageNumber];
   }
 }
