@@ -32,9 +32,15 @@ class _ListInfoPageState extends State<ListInfoPage> {
     listName = widget.listName;
   }
 
+  String itemUnit = "";
+
   @override
   Widget build(BuildContext context) {
-    String unit = Units().list.first;
+    List<String> units = Units().list;
+
+    if (itemUnit.isEmpty) {
+      itemUnit = units.first;
+    }
 
     setState(() {
       widget.items =
@@ -51,7 +57,7 @@ class _ListInfoPageState extends State<ListInfoPage> {
         centerTitle: true,
         actions: <Widget>[
           Padding(
-              padding: EdgeInsets.only(right: 20.0),
+              padding: const EdgeInsets.only(right: 20.0),
               child: GestureDetector(
                 onTap: () {
                   TextEditingController nameController =
@@ -100,12 +106,12 @@ class _ListInfoPageState extends State<ListInfoPage> {
                     }
                   });
                 },
-                child: Icon(
+                child: const Icon(
                   Icons.edit,
                 ),
               )),
           Padding(
-              padding: EdgeInsets.only(right: 20.0),
+              padding: const EdgeInsets.only(right: 20.0),
               child: GestureDetector(
                 onTap: () {
                   showDialog<bool>(
@@ -137,7 +143,7 @@ class _ListInfoPageState extends State<ListInfoPage> {
                     }
                   });
                 },
-                child: Icon(Icons.delete),
+                child: const Icon(Icons.delete),
               )),
         ],
       ),
@@ -150,7 +156,7 @@ class _ListInfoPageState extends State<ListInfoPage> {
             .snapshots(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
-            return Text('loading');
+            return const CircularProgressIndicator();
           }
           var rawItems = snapshot.data!['items'];
 
@@ -187,87 +193,90 @@ class _ListInfoPageState extends State<ListInfoPage> {
           TextEditingController countController = TextEditingController();
           showDialog<String>(
             context: context,
-            builder: (BuildContext context) => AlertDialog(
-              title: const Text('Dodawanie produktu'),
-              content: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Row(
-                    children: [
-                      Text("Nazwa:"),
-                      Expanded(
-                          child: TextField(
-                        controller: nameController,
-                      )),
-                    ],
+            builder: (BuildContext context) => StatefulBuilder(
+              builder: (context, setState) => AlertDialog(
+                title: const Text('Dodawanie produktu'),
+                content: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Row(
+                      children: [
+                        Text("Nazwa:"),
+                        Expanded(
+                            child: TextField(
+                          controller: nameController,
+                        )),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Text("Ilość:"),
+                        Expanded(
+                            child: Container(
+                                child: TextField(
+                          controller: countController,
+                          keyboardType: TextInputType.number,
+                          inputFormatters: <TextInputFormatter>[
+                            FilteringTextInputFormatter.allow(
+                                RegExp(r"[0-9.]")),
+                            TextInputFormatter.withFunction(
+                                (oldValue, newValue) {
+                              try {
+                                final text = newValue.text;
+                                if (text.isNotEmpty) double.parse(text);
+                                return newValue;
+                              } catch (e) {}
+                              return oldValue;
+                            }),
+                          ],
+                        ))),
+                        DropdownButton<String>(
+                            value: itemUnit,
+                            items: units
+                                .map<DropdownMenuItem<String>>((String val) {
+                              return DropdownMenuItem<String>(
+                                value: val,
+                                child: Text(val),
+                              );
+                            }).toList(),
+                            onChanged: (String? val) {
+                              setState(() {
+                                itemUnit = val!;
+                              });
+                            }),
+                      ],
+                    ),
+                  ],
+                ),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      nameController.text = "";
+                      Navigator.pop(context, "");
+                    },
+                    child: const Text('Anuluj'),
                   ),
-                  Row(
-                    children: [
-                      Text("Ilość:"),
-                      Expanded(
-                          child: Container(
-                              child: TextField(
-                        controller: countController,
-                        keyboardType: TextInputType.number,
-                        inputFormatters: <TextInputFormatter>[
-                          FilteringTextInputFormatter.allow(RegExp(r"[0-9.]")),
-                          TextInputFormatter.withFunction((oldValue, newValue) {
-                            try {
-                              final text = newValue.text;
-                              if (text.isNotEmpty) double.parse(text);
-                              return newValue;
-                            } catch (e) {}
-                            return oldValue;
-                          }),
-                        ],
-                      ))),
-                      DropdownButton<String>(
-                          value: unit,
-                          items: Units()
-                              .list
-                              .map<DropdownMenuItem<String>>((String val) {
-                            return DropdownMenuItem<String>(
-                              value: val,
-                              child: Text(val),
-                            );
-                          }).toList(),
-                          onChanged: (String? val) {
-                            setState(() {
-                              unit = val!;
-                            });
-                          })
-                    ],
+                  TextButton(
+                    onPressed: () {
+                      String name = nameController.text;
+                      String count = countController.text;
+                      widget.items.add(ItemModel(
+                          itemName: name,
+                          itemCount: count,
+                          itemUnit: itemUnit,
+                          isChecked: false));
+                      DatabaseService(uid: AuthService().uid)
+                          .addItems(widget.listID, widget.items);
+                      nameController.text = "";
+                      countController.text = "";
+                      Navigator.pop(context, "");
+                    },
+                    child: const Text('Dodaj'),
                   ),
                 ],
               ),
-              actions: [
-                TextButton(
-                  onPressed: () {
-                    nameController.text = "";
-                    Navigator.pop(context, "");
-                  },
-                  child: const Text('Anuluj'),
-                ),
-                TextButton(
-                  onPressed: () {
-                    String name = nameController.text;
-                    String count = countController.text;
-                    widget.items.add(ItemModel(
-                        itemName: name,
-                        itemCount: count,
-                        itemUnit: unit,
-                        isChecked: false));
-                    DatabaseService(uid: AuthService().uid)
-                        .addItems(widget.listID, widget.items);
-                    nameController.text = "";
-                    countController.text = "";
-                    Navigator.pop(context, "");
-                  },
-                  child: const Text('Dodaj'),
-                ),
-              ],
             ),
           );
         },
