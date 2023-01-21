@@ -5,6 +5,7 @@ import 'package:gb_shopping_list/pages/home/list_info.dart';
 import 'package:gb_shopping_list/props/units.dart';
 import 'package:gb_shopping_list/services/auth.dart';
 import 'package:gb_shopping_list/services/database.dart';
+import 'package:image_picker/image_picker.dart';
 
 class ItemInfoPage extends StatefulWidget {
   ItemInfoPage({Key? key, required this.itemModel}) : super(key: key);
@@ -18,9 +19,15 @@ class ItemInfoPage extends StatefulWidget {
 }
 
 class _ItemInfoPageState extends State<ItemInfoPage> {
+  XFile? itemImage;
+
+  ItemModel? oldItem;
+
   @override
   Widget build(BuildContext context) {
     ItemModel item = widget.itemModel;
+
+    oldItem ??= ItemModel(itemName: item.itemName, itemCount: item.itemCount, itemUnit: item.itemUnit, isChecked: item.isChecked, itemInfo: item.itemInfo, listID: item.listID);
 
     TextEditingController nameController = TextEditingController();
     TextEditingController countController = TextEditingController();
@@ -30,7 +37,12 @@ class _ItemInfoPageState extends State<ItemInfoPage> {
     countController.text = item.itemCount;
     infoController.text = item.itemInfo;
 
-    String unit = item.itemUnit;
+    String unit = "";
+
+    if(unit.isEmpty)
+    {
+      unit = item.itemUnit;
+    }
 
     List<String> units = Units().list;
 
@@ -71,8 +83,7 @@ class _ItemInfoPageState extends State<ItemInfoPage> {
                   isChecked: item.isChecked,
                   listID: item.listID);
               DatabaseService(uid: AuthService().uid)
-                  .replaceItem(item, newItem);
-              item = newItem;
+                  .replaceItem(oldItem!, newItem);
             }
             Navigator.pop(context);
             return true;
@@ -123,77 +134,64 @@ class _ItemInfoPageState extends State<ItemInfoPage> {
                 )),
           ],
         ),
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Row(
-              children: [
-                const Text("Nazwa:"),
-                Expanded(
-                    child: TextField(
-                  controller: nameController,
-                )),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                const Text("Ilość:"),
-                Expanded(
-                    child: TextField(
-                  controller: countController,
-                  keyboardType: TextInputType.number,
-                  inputFormatters: <TextInputFormatter>[
-                    FilteringTextInputFormatter.allow(RegExp(r"[0-9.]")),
-                    TextInputFormatter.withFunction((oldValue, newValue) {
-                      try {
-                        final text = newValue.text;
-                        if (text.isNotEmpty) double.parse(text);
-                        return newValue;
-                      } catch (e) {}
-                      return oldValue;
-                    }),
-                  ],
-                )),
-                DropdownButton<String>(
-                    value: unit,
-                    items: units.map<DropdownMenuItem<String>>((String val) {
-                      return DropdownMenuItem<String>(
-                        value: val,
-                        child: Text(val),
-                      );
-                    }).toList(),
-                    onChanged: (String? val) {
-                      setState(() {
-                        unit = val!;
-                      });
-                    })
-              ],
-            ),
-            const Text('Dodatkowe informacje:'),
-            TextField(
-              controller: infoController,
-              keyboardType: TextInputType.multiline,
-              minLines: 1, //Normal textInputField will be displayed
-              maxLines: 5, // when user presses enter it will adapt to it
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                TextButton(
-                  onPressed: () {},
-                  child: const Text('Zrób zdjęcie'),
-                ),
-                TextButton(
-                  onPressed: () {},
-                  child: const Text('Dodaj zdjęcie'),
-                ),
-              ],
-            ),
-            //Image(image: null,), //TODO: wyswietlanie obrazka
-          ],
+        body: SafeArea(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Row(
+                children: [
+                  const Text("Nazwa:"),
+                  Expanded(
+                      child: TextField(
+                        controller: nameController,
+                      )),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const Text("Ilość:"),
+                  Expanded(
+                      child: TextField(
+                        controller: countController,
+                        keyboardType: TextInputType.number,
+                        inputFormatters: <TextInputFormatter>[
+                          FilteringTextInputFormatter.allow(RegExp(r"[0-9.]")),
+                          TextInputFormatter.withFunction((oldValue, newValue) {
+                            try {
+                              final text = newValue.text;
+                              if (text.isNotEmpty) double.parse(text);
+                              return newValue;
+                            } catch (e) {}
+                            return oldValue;
+                          }),
+                        ],
+                      )),
+                  DropdownButton<String>(
+                      value: unit,
+                      items: units.map<DropdownMenuItem<String>>((String val) {
+                        return DropdownMenuItem<String>(
+                          value: val,
+                          child: Text(val),
+                        );
+                      }).toList(),
+                      onChanged: (String? val) {
+                        setState(() {
+                          item.itemUnit = val!;
+                        });
+                      })
+                ],
+              ),
+              const Text('Dodatkowe informacje:'),
+              TextField(
+                controller: infoController,
+                keyboardType: TextInputType.multiline,
+                minLines: 1, //Normal textInputField will be displayed
+                maxLines: 5, // when user presses enter it will adapt to it
+              ),
+            ],
+          ),
         ),
       ),
     );
