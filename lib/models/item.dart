@@ -3,6 +3,7 @@ class ItemModel {
   String itemCount;
   String itemUnit;
   String itemInfo;
+  String itemBarcode;
   bool isChecked;
   String listID;
 
@@ -12,7 +13,8 @@ class ItemModel {
       required this.itemCount,
       required this.itemUnit,
       required this.isChecked,
-      this.itemInfo = ""});
+      this.itemInfo = "",
+      this.itemBarcode = ""});
 
   Map<String, dynamic> get itemNegative {
     return {
@@ -20,6 +22,7 @@ class ItemModel {
       'itemCount': itemCount,
       'itemUnit': itemUnit,
       'itemInfo': itemInfo,
+      'itemBarcode': itemBarcode,
       'isChecked': isChecked ? false : true,
     };
   }
@@ -30,6 +33,7 @@ class ItemModel {
       'itemCount': itemCount,
       'itemUnit': itemUnit,
       'itemInfo': itemInfo,
+      'itemBarcode': itemBarcode,
       'isChecked': isChecked,
     };
   }

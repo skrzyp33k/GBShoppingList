@@ -114,6 +114,7 @@ class DatabaseService {
             itemCount: item['itemCount'] ?? "",
             itemUnit: item['itemUnit'] ?? "szt",
             itemInfo: item['itemInfo'] ?? "",
+            itemBarcode: item['itemBarcode'] ?? "",
             isChecked: item['isChecked'] ?? false,
             listID: doc.id));
       }

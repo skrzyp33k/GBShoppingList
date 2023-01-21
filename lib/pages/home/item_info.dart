@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:gb_shopping_list/models/item.dart';
 import 'package:gb_shopping_list/pages/home/list_info.dart';
 import 'package:gb_shopping_list/props/units.dart';
@@ -20,6 +21,12 @@ class ItemInfoPage extends StatefulWidget {
 class _ItemInfoPageState extends State<ItemInfoPage> {
 
   ItemModel? oldItem;
+  
+  String _barcode = "";
+  
+  _scan() async {
+    await FlutterBarcodeScanner.scanBarcode("#FFBD59", "Anuluj", true, ScanMode.BARCODE).then((value) => setState(() => _barcode = value));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -187,6 +194,64 @@ class _ItemInfoPageState extends State<ItemInfoPage> {
                 keyboardType: TextInputType.multiline,
                 minLines: 1, //Normal textInputField will be displayed
                 maxLines: 5, // when user presses enter it will adapt to it
+              ),
+              const Text('Kod kreskowy:'),
+              Text(item.itemBarcode),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  OutlinedButton(onPressed: () async{
+                    await _scan();
+                    setState(() {
+                      item.itemBarcode = _barcode;
+                    });
+                    DatabaseService(uid: AuthService().uid)
+                        .replaceItem(oldItem!, item);
+                  }, child: item.itemBarcode.isEmpty ? const Text('Dodaj kod kreskowy') : const Text('Zmień kod kreskowy')),
+                  OutlinedButton(onPressed: () async{
+                    await _scan();
+                    if(_barcode == "-1")
+                      {
+                        setState((){_barcode = "";});
+                      }
+                    else if(_barcode == item.itemBarcode)
+                      {
+                        showDialog<String>(
+                          context: context,
+                          builder: (BuildContext context) => AlertDialog(
+                            title: const Text('Wynik skanowania'),
+                            content: const Text(
+                                'Ten sam produkt!'),
+                            actions: [
+                              TextButton(
+                                onPressed: () =>
+                                    Navigator.pop(context, 'OK'),
+                                child: const Text('OK'),
+                              ),
+                            ],
+                          ),
+                        );
+                      }
+                    else
+                      {
+                        showDialog<String>(
+                          context: context,
+                          builder: (BuildContext context) => AlertDialog(
+                            title: const Text('Wynik skanowania'),
+                            content: const Text(
+                                'Inny produkt!'),
+                            actions: [
+                              TextButton(
+                                onPressed: () =>
+                                    Navigator.pop(context, 'OK'),
+                                child: const Text('OK'),
+                              ),
+                            ],
+                          ),
+                        );
+                      }
+                  }, child: Text('Sprawdź kod kreskowy')),
+                ],
               ),
             ],
           ),
