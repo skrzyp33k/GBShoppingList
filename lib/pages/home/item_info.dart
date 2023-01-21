@@ -5,7 +5,6 @@ import 'package:gb_shopping_list/pages/home/list_info.dart';
 import 'package:gb_shopping_list/props/units.dart';
 import 'package:gb_shopping_list/services/auth.dart';
 import 'package:gb_shopping_list/services/database.dart';
-import 'package:image_picker/image_picker.dart';
 
 class ItemInfoPage extends StatefulWidget {
   ItemInfoPage({Key? key, required this.itemModel}) : super(key: key);
@@ -19,7 +18,6 @@ class ItemInfoPage extends StatefulWidget {
 }
 
 class _ItemInfoPageState extends State<ItemInfoPage> {
-  XFile? itemImage;
 
   ItemModel? oldItem;
 
