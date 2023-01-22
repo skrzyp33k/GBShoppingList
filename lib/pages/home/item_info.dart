@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:gb_shopping_list/models/item.dart';
 import 'package:gb_shopping_list/props/units.dart';
 import 'package:gb_shopping_list/services/auth.dart';
 import 'package:gb_shopping_list/services/database.dart';
+import 'package:barcode_scan2/barcode_scan2.dart';
 
 class ItemInfoPage extends StatefulWidget {
   ItemInfoPage({Key? key, required this.itemModel}) : super(key: key);
@@ -22,7 +22,19 @@ class _ItemInfoPageState extends State<ItemInfoPage> {
   String _barcode = "";
   
   _scan() async {
-    await FlutterBarcodeScanner.scanBarcode("#FFBD59", "Anuluj", true, ScanMode.BARCODE).then((value) => setState(() => _barcode = value));
+    var options = ScanOptions(
+      autoEnableFlash: false,
+      android: AndroidOptions(
+        useAutoFocus: true,
+        aspectTolerance: 1.0,
+      ),
+      strings: const {'cancel': 'Anuluj', 'flash_on': 'Włącz latarkę', 'flash_off':'Wyłącz latarkę'},
+    );
+    var result = await BarcodeScanner.scan(options: options);
+    if(result.type == ResultType.Barcode)
+      {
+        _barcode = result.rawContent;
+      }
   }
 
   @override

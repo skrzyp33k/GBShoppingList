@@ -31,10 +31,13 @@ class GBSLApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
         providers: [
-          StreamProvider<UserModel?>.value(
-              value: AuthService().user, initialData: null),
-          StreamProvider<List<ListModel>>.value(
-              value: DatabaseService(uid: AuthService().uid).lists,
+          StreamProvider<UserModel?>(
+              create: (_) => AuthService().user,
+              lazy: false,
+              initialData: null),
+          StreamProvider<List<ListModel>>(
+              create: (_) => DatabaseService(uid: AuthService().uid).lists,
+              lazy: false,
               initialData: []),
         ],
         child: MaterialApp(
