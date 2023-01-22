@@ -5,6 +5,7 @@ import 'package:gb_shopping_list/services/database.dart';
 import 'package:gb_shopping_list/widgets/drawer.dart';
 import 'package:gb_shopping_list/widgets/lists_view.dart';
 import 'package:move_to_background/move_to_background.dart';
+import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -71,7 +72,8 @@ class _HomePageState extends State<HomePage> {
             String name = val!.trim();
             {
               if (name.isNotEmpty) {
-                ListModel newList = ListModel(listName: name, isTrashed: false, listItems: []);
+                ListModel newList =
+                    ListModel(listName: name, isTrashed: false, listItems: []);
                 DatabaseService(uid: AuthService().uid).addNewList(newList);
               }
             }
@@ -106,7 +108,8 @@ class _HomePageState extends State<HomePage> {
             ).then((val) {
               {
                 if (val!) {
-                  DatabaseService(uid: AuthService().uid).deleteAllListsFromTrash();
+                  DatabaseService(uid: AuthService().uid)
+                      .deleteAllListsFromTrash();
                 }
               }
             });
@@ -115,35 +118,40 @@ class _HomePageState extends State<HomePage> {
           child: const Icon(Icons.delete_forever)),
     ];
 
-    return WillPopScope(
-      onWillPop: () async {
-        MoveToBackground.moveTaskToBack();
-        return false;
-      },
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text(_barTitle),
-          foregroundColor: Theme.of(context).colorScheme.tertiary,
+    return StreamProvider<List<ListModel>>(
+      create: (_) => DatabaseService(uid: AuthService().uid).lists,
+      lazy: false,
+      initialData: [],
+      child: WillPopScope(
+        onWillPop: () async {
+          MoveToBackground.moveTaskToBack();
+          return false;
+        },
+        child: Scaffold(
+          appBar: AppBar(
+            title: Text(_barTitle),
+            foregroundColor: Theme.of(context).colorScheme.tertiary,
+          ),
+          drawer: const MenuDrawer(),
+          body: Center(
+            child: ListsView(pageNumber: _selectedTab),
+          ),
+          bottomNavigationBar: BottomNavigationBar(
+            items: const <BottomNavigationBarItem>[
+              BottomNavigationBarItem(
+                  icon: Icon(Icons.shopping_cart_outlined),
+                  label: 'Aktywne listy'),
+              BottomNavigationBarItem(
+                  icon: Icon(Icons.check_circle_outline_rounded),
+                  label: 'Ukończone listy'),
+              BottomNavigationBarItem(
+                  icon: Icon(Icons.delete_outline), label: 'Usunięte listy'),
+            ],
+            currentIndex: _selectedTab,
+            onTap: _onTabTapped,
+          ),
+          floatingActionButton: fabsList.elementAt(_selectedTab),
         ),
-        drawer: const MenuDrawer(),
-        body: Center(
-          child: ListsView(pageNumber: _selectedTab),
-        ),
-        bottomNavigationBar: BottomNavigationBar(
-          items: const <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-                icon: Icon(Icons.shopping_cart_outlined),
-                label: 'Aktywne listy'),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.check_circle_outline_rounded),
-                label: 'Ukończone listy'),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.delete_outline), label: 'Usunięte listy'),
-          ],
-          currentIndex: _selectedTab,
-          onTap: _onTabTapped,
-        ),
-        floatingActionButton: fabsList.elementAt(_selectedTab),
       ),
     );
   }

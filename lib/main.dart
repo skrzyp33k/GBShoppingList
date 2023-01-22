@@ -29,17 +29,10 @@ class GBSLApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-        providers: [
-          StreamProvider<UserModel?>(
-              create: (_) => AuthService().user,
-              lazy: false,
-              initialData: null),
-          StreamProvider<List<ListModel>>(
-              create: (_) => DatabaseService(uid: AuthService().uid).lists,
-              lazy: false,
-              initialData: []),
-        ],
+    return StreamProvider<UserModel?>(
+        create: (_) => AuthService().user,
+        lazy: false,
+        initialData: null,
         child: MaterialApp(
             title: 'GB Shopping List',
             theme: ThemeData(
