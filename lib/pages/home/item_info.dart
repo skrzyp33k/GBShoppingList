@@ -7,7 +7,7 @@ import 'package:gb_shopping_list/services/database.dart';
 import 'package:barcode_scan2/barcode_scan2.dart';
 
 class ItemInfoPage extends StatefulWidget {
-  ItemInfoPage({Key? key, required this.itemModel}) : super(key: key);
+  const ItemInfoPage({Key? key, required this.itemModel}) : super(key: key);
 
   final ItemModel itemModel;
 
@@ -19,29 +19,37 @@ class _ItemInfoPageState extends State<ItemInfoPage> {
 
   ItemModel? _oldItem;
   
+  String _barcodeLastResult = "";
+  
   String _barcode = "";
   
   _scan() async {
-    var options = ScanOptions(
+    var options = const ScanOptions(
       autoEnableFlash: false,
       android: AndroidOptions(
         useAutoFocus: true,
         aspectTolerance: 1.0,
       ),
-      strings: const {'cancel': 'Anuluj', 'flash_on': 'Włącz latarkę', 'flash_off':'Wyłącz latarkę'},
+      strings: {'cancel': 'Anuluj', 'flash_on': 'Włącz latarkę', 'flash_off':'Wyłącz latarkę'},
     );
     var result = await BarcodeScanner.scan(options: options);
-    if(result.type == ResultType.Barcode)
+    print("--------------------------------------------------------------------");
+    print(result.type);
+    print("--------------------------------------------------------------------");
+    _barcodeLastResult = result.rawContent;
+    if(result.type != ResultType.Barcode)
       {
-        _barcode = result.rawContent;
+        _barcodeLastResult = "-1";
+      }
+    if(_barcodeLastResult != "-1")
+      {
+        _barcode = _barcodeLastResult;
       }
   }
 
   @override
   Widget build(BuildContext context) {
     ItemModel item = widget.itemModel;
-
-    print(item.item);
 
     _oldItem ??= ItemModel(itemName: item.itemName, itemCount: item.itemCount, itemUnit: item.itemUnit, itemBarcode: item.itemBarcode, isChecked: item.isChecked, itemInfo: item.itemInfo, listID: item.listID);
 
@@ -117,7 +125,7 @@ class _ItemInfoPageState extends State<ItemInfoPage> {
           centerTitle: true,
           actions: <Widget>[
             Padding(
-                padding: EdgeInsets.only(right: 20.0),
+                padding: const EdgeInsets.only(right: 20.0),
                 child: GestureDetector(
                   onTap: ()  {
                     showDialog<bool>(
@@ -148,7 +156,7 @@ class _ItemInfoPageState extends State<ItemInfoPage> {
                       }
                     });
                   },
-                  child: Icon(Icons.delete),
+                  child: const Icon(Icons.delete),
                 )),
           ],
         ),
@@ -186,7 +194,9 @@ class _ItemInfoPageState extends State<ItemInfoPage> {
                                 final text = newValue.text;
                                 if (text.isNotEmpty) double.parse(text);
                                 return newValue;
-                              } catch (e) {}
+                              } catch (e) {
+                                //do nothing
+                              }
                               return oldValue;
                             }),
                           ],
@@ -221,55 +231,60 @@ class _ItemInfoPageState extends State<ItemInfoPage> {
                   children: [
                     OutlinedButton(onPressed: () async{
                       await _scan();
-                      setState(() {
-                        item.itemBarcode = _barcode;
-                      });
-                      DatabaseService(uid: AuthService().uid)
-                          .replaceItem(_oldItem!, item);
+                      print("--------------------------------------------------------------------");
+                      print("barcode last result: {$_barcodeLastResult}");
+                      print("barcode: {$_barcode}");
+                      print("--------------------------------------------------------------------");
+                      if(_barcodeLastResult != "-1")
+                        {
+                          setState(() {
+                            item.itemBarcode = _barcode;
+                          });
+                          DatabaseService(uid: AuthService().uid)
+                              .replaceItem(_oldItem!, item);
+                        }
                     }, child: item.itemBarcode.isEmpty ? const Text('Dodaj kod kreskowy') : const Text('Zmień kod kreskowy')),
-                    OutlinedButton(onPressed: () async{
+                    OutlinedButton(onPressed: () async {
                       await _scan();
-                      if(_barcode == "-1")
-                        {
-                          setState((){_barcode = "";});
-                        }
-                      else if(_barcode == item.itemBarcode)
-                        {
+                      if (_barcodeLastResult != "-1") {
+                        if (_barcode == item.itemBarcode) {
                           showDialog<String>(
                             context: context,
-                            builder: (BuildContext context) => AlertDialog(
-                              title: const Text('Wynik skanowania'),
-                              content: const Text(
-                                  'Ten sam produkt!'),
-                              actions: [
-                                TextButton(
-                                  onPressed: () =>
-                                      Navigator.pop(context, 'OK'),
-                                  child: const Text('OK'),
+                            builder: (BuildContext context) =>
+                                AlertDialog(
+                                  title: const Text('Wynik skanowania'),
+                                  content: const Text(
+                                      'Ten sam produkt!'),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () =>
+                                          Navigator.pop(context, 'OK'),
+                                      child: const Text('OK'),
+                                    ),
+                                  ],
                                 ),
-                              ],
-                            ),
                           );
                         }
-                      else
-                        {
+                        else {
                           showDialog<String>(
                             context: context,
-                            builder: (BuildContext context) => AlertDialog(
-                              title: const Text('Wynik skanowania'),
-                              content: const Text(
-                                  'Inny produkt!'),
-                              actions: [
-                                TextButton(
-                                  onPressed: () =>
-                                      Navigator.pop(context, 'OK'),
-                                  child: const Text('OK'),
+                            builder: (BuildContext context) =>
+                                AlertDialog(
+                                  title: const Text('Wynik skanowania'),
+                                  content: const Text(
+                                      'Inny produkt!'),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () =>
+                                          Navigator.pop(context, 'OK'),
+                                      child: const Text('OK'),
+                                    ),
+                                  ],
                                 ),
-                              ],
-                            ),
                           );
                         }
-                    }, child: Text('Sprawdź kod kreskowy')),
+                      }
+                    }, child: const Text('Sprawdź kod kreskowy')),
                   ],
                 ),
               ],
