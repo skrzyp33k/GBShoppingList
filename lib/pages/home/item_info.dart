@@ -44,6 +44,10 @@ class _ItemInfoPageState extends State<ItemInfoPage> {
     if(_barcodeLastResult != "-1")
       {
         _barcode = _barcodeLastResult;
+        if(_oldItem != null)
+          {
+            _oldItem!.itemBarcode = _barcode;
+          }
       }
   }
 
