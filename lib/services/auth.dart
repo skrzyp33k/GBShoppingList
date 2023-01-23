@@ -73,6 +73,7 @@ class AuthService {
 
   //delete user
   void deleteUser() async {
+    await DatabaseService(uid: _auth.currentUser!.uid).deleteUserSpace();
     await _auth.currentUser!.delete();
     signOut();
   }

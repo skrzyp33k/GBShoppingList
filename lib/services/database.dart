@@ -44,12 +44,6 @@ class DatabaseService {
   }
 
   Future<void> replaceItem(ItemModel oldItem, ItemModel newItem) async {
-    print("-------------------------------------------------------------");
-    print("Old:");
-    print(oldItem.item);
-    print("New:");
-    print(newItem.item);
-    print("-------------------------------------------------------------");
     await rootCollection
         .doc(uid)
         .collection('lists')
@@ -93,6 +87,16 @@ class DatabaseService {
 
   Future<void> deleteListFromTrash(String listID) async {
     await rootCollection.doc(uid).collection('lists').doc(listID).delete();
+  }
+
+  Future<void> deleteUserSpace() async {
+    await rootCollection.doc(uid).collection('lists').get().then((snapshot){
+      for(DocumentSnapshot ds in snapshot.docs)
+        {
+          ds.reference.delete();
+        }
+    });
+    await rootCollection.doc(uid).delete();
   }
 
   Future<void> deleteAllListsFromTrash() async {
