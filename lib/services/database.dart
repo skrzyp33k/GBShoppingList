@@ -44,6 +44,10 @@ class DatabaseService {
   }
 
   Future<void> replaceItem(ItemModel oldItem, ItemModel newItem) async {
+    print('---------------------------');
+    print(oldItem.item);
+    print(newItem.item);
+    print('---------------------------');
     await rootCollection
         .doc(uid)
         .collection('lists')

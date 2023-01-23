@@ -44,10 +44,6 @@ class _ItemInfoPageState extends State<ItemInfoPage> {
     if(_barcodeLastResult != "-1")
       {
         _barcode = _barcodeLastResult;
-        if(_oldItem != null)
-          {
-            _oldItem!.itemBarcode = _barcode;
-          }
       }
   }
 
@@ -235,10 +231,6 @@ class _ItemInfoPageState extends State<ItemInfoPage> {
                   children: [
                     OutlinedButton(onPressed: () async{
                       await _scan();
-                      print("--------------------------------------------------------------------");
-                      print("barcode last result: {$_barcodeLastResult}");
-                      print("barcode: {$_barcode}");
-                      print("--------------------------------------------------------------------");
                       if(_barcodeLastResult != "-1")
                         {
                           setState(() {
@@ -246,6 +238,7 @@ class _ItemInfoPageState extends State<ItemInfoPage> {
                           });
                           DatabaseService(uid: AuthService().uid)
                               .replaceItem(_oldItem!, item);
+                            _oldItem!.itemBarcode = _barcode;
                         }
                     }, child: item.itemBarcode.isEmpty ? const Text('Dodaj kod kreskowy') : const Text('Zmień kod kreskowy')),
                     OutlinedButton(onPressed: () async {
