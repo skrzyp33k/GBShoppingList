@@ -5,7 +5,7 @@ import 'package:gb_shopping_list/widgets/list_card.dart';
 import 'package:provider/provider.dart';
 
 class ListsView extends StatefulWidget {
-  ListsView({Key? key, required this.pageNumber}) : super(key: key);
+  const ListsView({Key? key, required this.pageNumber}) : super(key: key);
 
   final int pageNumber;
 
@@ -16,7 +16,6 @@ class ListsView extends StatefulWidget {
 class _ListsViewState extends State<ListsView> {
   @override
   Widget build(BuildContext context) {
-
     List<ListModel> rawModels = Provider.of<List<ListModel>>(context);
 
     List<ListCard> rawItems = <ListCard>[];

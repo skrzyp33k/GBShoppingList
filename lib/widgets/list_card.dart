@@ -6,32 +6,33 @@ import 'package:gb_shopping_list/services/auth.dart';
 import 'package:gb_shopping_list/services/database.dart';
 
 class ListCard extends StatefulWidget {
-  ListCard({
+  const ListCard({
     Key? key,
     required this.listModel,
   }) : super(key: key);
 
-  ListModel listModel;
-
-  int checkedItems = 0;
-  int allItems = 0;
+  final ListModel listModel;
 
   @override
   State<ListCard> createState() => _ListCardState();
 }
 
 class _ListCardState extends State<ListCard> {
+  int checkedItems = 0;
+  int allItems = 0;
+
   @override
   Widget build(BuildContext context) {
     ListModel list = widget.listModel;
 
-    widget.allItems = list.listItems.length;
+    allItems = list.listItems.length;
+    checkedItems = 0;
 
     for (ItemModel i in list.listItems) {
-      if (i.isChecked) widget.checkedItems++;
+      if (i.isChecked) checkedItems++;
     }
 
-    String listSize = "${widget.checkedItems} / ${widget.allItems}";
+    String listSize = "$checkedItems / $allItems";
     String listName = list.listName;
     bool isTrashed = list.isTrashed;
     return InkWell(
@@ -40,8 +41,10 @@ class _ListCardState extends State<ListCard> {
           : Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) =>
-                      ListInfoPage(listName: listName, items: list.listItems, listID: list.ID))),
+                  builder: (context) => ListInfoPage(
+                      listName: listName,
+                      items: list.listItems,
+                      listID: list.ID))),
       child: Container(
         constraints: const BoxConstraints(minWidth: 100, maxWidth: 200),
         margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
@@ -68,7 +71,8 @@ class _ListCardState extends State<ListCard> {
                     children: [
                       IconButton(
                         onPressed: () {
-                          DatabaseService(uid: AuthService().uid).moveListFromTrash(widget.listModel.ID);
+                          DatabaseService(uid: AuthService().uid)
+                              .moveListFromTrash(widget.listModel.ID);
                         },
                         icon: const Icon(Icons.restore_from_trash),
                         color: Theme.of(context).colorScheme.tertiary,
@@ -98,7 +102,8 @@ class _ListCardState extends State<ListCard> {
                           ).then((val) {
                             {
                               if (val!) {
-                                DatabaseService(uid: AuthService().uid).deleteListFromTrash(widget.listModel.ID);
+                                DatabaseService(uid: AuthService().uid)
+                                    .deleteListFromTrash(widget.listModel.ID);
                               }
                             }
                           });

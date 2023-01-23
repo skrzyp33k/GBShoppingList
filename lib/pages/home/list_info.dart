@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gb_shopping_list/models/item.dart';
 import 'package:gb_shopping_list/props/units.dart';
-import 'package:gb_shopping_list/services/database.dart';
 import 'package:gb_shopping_list/services/auth.dart';
+import 'package:gb_shopping_list/services/database.dart';
 import 'package:gb_shopping_list/widgets/item_card.dart';
 
 class ListInfoPage extends StatefulWidget {
-  ListInfoPage(
+  const ListInfoPage(
       {Key? key,
       required this.listName,
       required this.items,
@@ -17,7 +17,7 @@ class ListInfoPage extends StatefulWidget {
   final String listName;
   final String listID;
 
-  late List<ItemModel> items;
+  final List<ItemModel> items;
 
   @override
   State<ListInfoPage> createState() => _ListInfoPageState();
@@ -26,10 +26,11 @@ class ListInfoPage extends StatefulWidget {
 class _ListInfoPageState extends State<ListInfoPage> {
   late String listName;
 
-  @protected
+  @override
   @mustCallSuper
   void initState() {
     listName = widget.listName;
+    super.initState();
   }
 
   String itemUnit = "";
@@ -41,13 +42,6 @@ class _ListInfoPageState extends State<ListInfoPage> {
     if (itemUnit.isEmpty) {
       itemUnit = units.first;
     }
-
-    setState(() {
-      widget.items =
-          DatabaseService(uid: AuthService().uid).getItems(widget.listID);
-    });
-
-    widget.items.sort((a, b) => a.itemName.compareTo(b.itemName));
 
     return Scaffold(
       appBar: AppBar(
@@ -179,10 +173,9 @@ class _ListInfoPageState extends State<ListInfoPage> {
             padding: const EdgeInsets.all(5),
             itemCount: items.length,
             itemBuilder: (BuildContext context, int index) {
-              return Container(
-                  child: ItemCard(
+              return ItemCard(
                 itemModel: items[index],
-              ));
+              );
             },
           );
         },
@@ -203,7 +196,7 @@ class _ListInfoPageState extends State<ListInfoPage> {
                   children: [
                     Row(
                       children: [
-                        Text("Nazwa:"),
+                        const Text("Nazwa:"),
                         Expanded(
                             child: TextField(
                           controller: nameController,
@@ -212,26 +205,27 @@ class _ListInfoPageState extends State<ListInfoPage> {
                     ),
                     Row(
                       children: [
-                        Text("Ilość:"),
+                        const Text("Ilość:"),
                         Expanded(
-                            child: Container(
-                                child: TextField(
+                            child: TextField(
                           controller: countController,
                           keyboardType: TextInputType.number,
                           inputFormatters: <TextInputFormatter>[
                             FilteringTextInputFormatter.allow(
-                                RegExp(r"[0-9.]")),
+                            RegExp(r"[0-9.]")),
                             TextInputFormatter.withFunction(
-                                (oldValue, newValue) {
+                            (oldValue, newValue) {
                               try {
-                                final text = newValue.text;
-                                if (text.isNotEmpty) double.parse(text);
-                                return newValue;
-                              } catch (e) {}
+                            final text = newValue.text;
+                            if (text.isNotEmpty) double.parse(text);
+                            return newValue;
+                              } catch (e) {
+                                //do nothing
+                              }
                               return oldValue;
                             }),
                           ],
-                        ))),
+                        )),
                         DropdownButton<String>(
                             value: itemUnit,
                             items: units

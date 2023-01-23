@@ -121,7 +121,7 @@ class _HomePageState extends State<HomePage> {
     return StreamProvider<List<ListModel>>(
       create: (_) => DatabaseService(uid: AuthService().uid).lists,
       lazy: false,
-      initialData: [],
+      initialData: const [],
       child: WillPopScope(
         onWillPop: () async {
           MoveToBackground.moveTaskToBack();

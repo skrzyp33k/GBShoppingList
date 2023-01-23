@@ -5,9 +5,9 @@ import 'package:gb_shopping_list/services/auth.dart';
 import 'package:gb_shopping_list/services/database.dart';
 
 class ItemCard extends StatefulWidget {
-  ItemCard({Key? key, required this.itemModel}) : super(key: key);
+  const ItemCard({Key? key, required this.itemModel}) : super(key: key);
 
-  late ItemModel itemModel;
+  final ItemModel itemModel;
 
   @override
   State<ItemCard> createState() => _ItemCardState();
@@ -23,13 +23,11 @@ class _ItemCardState extends State<ItemCard> {
     String itemUnit = widget.itemModel.itemUnit;
 
     return InkWell(
-      onTap: () => Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) {
-                ItemInfoPage itemInfoPage = ItemInfoPage(itemModel: widget.itemModel);
-                return itemInfoPage;
-              } )),
+      onTap: () =>
+          Navigator.push(context, MaterialPageRoute(builder: (context) {
+        ItemInfoPage itemInfoPage = ItemInfoPage(itemModel: widget.itemModel);
+        return itemInfoPage;
+      })),
       child: Container(
         constraints: const BoxConstraints(minWidth: 100, maxWidth: 200),
         margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
@@ -92,7 +90,8 @@ class _ItemCardState extends State<ItemCard> {
                   setState(() {
                     widget.itemModel.isChecked = val!;
                   });
-                  DatabaseService(uid: AuthService().uid).setCheckBox(widget.itemModel);
+                  DatabaseService(uid: AuthService().uid)
+                      .setCheckBox(widget.itemModel);
                 }),
           ],
         ),

@@ -1,10 +1,10 @@
+import 'package:barcode_scan2/barcode_scan2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gb_shopping_list/models/item.dart';
 import 'package:gb_shopping_list/props/units.dart';
 import 'package:gb_shopping_list/services/auth.dart';
 import 'package:gb_shopping_list/services/database.dart';
-import 'package:barcode_scan2/barcode_scan2.dart';
 
 class ItemInfoPage extends StatefulWidget {
   const ItemInfoPage({Key? key, required this.itemModel}) : super(key: key);
@@ -16,13 +16,12 @@ class ItemInfoPage extends StatefulWidget {
 }
 
 class _ItemInfoPageState extends State<ItemInfoPage> {
-
   ItemModel? _oldItem;
-  
+
   String _barcodeLastResult = "";
-  
+
   String _barcode = "";
-  
+
   _scan() async {
     var options = const ScanOptions(
       autoEnableFlash: false,
@@ -30,28 +29,34 @@ class _ItemInfoPageState extends State<ItemInfoPage> {
         useAutoFocus: true,
         aspectTolerance: 1.0,
       ),
-      strings: {'cancel': 'Anuluj', 'flash_on': 'Włącz latarkę', 'flash_off':'Wyłącz latarkę'},
+      strings: {
+        'cancel': 'Anuluj',
+        'flash_on': 'Włącz latarkę',
+        'flash_off': 'Wyłącz latarkę'
+      },
     );
     var result = await BarcodeScanner.scan(options: options);
-    print("--------------------------------------------------------------------");
-    print(result.type);
-    print("--------------------------------------------------------------------");
     _barcodeLastResult = result.rawContent;
-    if(result.type != ResultType.Barcode)
-      {
-        _barcodeLastResult = "-1";
-      }
-    if(_barcodeLastResult != "-1")
-      {
-        _barcode = _barcodeLastResult;
-      }
+    if (result.type != ResultType.Barcode) {
+      _barcodeLastResult = "-1";
+    }
+    if (_barcodeLastResult != "-1") {
+      _barcode = _barcodeLastResult;
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     ItemModel item = widget.itemModel;
 
-    _oldItem ??= ItemModel(itemName: item.itemName, itemCount: item.itemCount, itemUnit: item.itemUnit, itemBarcode: item.itemBarcode, isChecked: item.isChecked, itemInfo: item.itemInfo, listID: item.listID);
+    _oldItem ??= ItemModel(
+        itemName: item.itemName,
+        itemCount: item.itemCount,
+        itemUnit: item.itemUnit,
+        itemBarcode: item.itemBarcode,
+        isChecked: item.isChecked,
+        itemInfo: item.itemInfo,
+        listID: item.listID);
 
     TextEditingController nameController = TextEditingController();
     TextEditingController countController = TextEditingController();
@@ -63,8 +68,7 @@ class _ItemInfoPageState extends State<ItemInfoPage> {
 
     String unit = "";
 
-    if(unit.isEmpty)
-    {
+    if (unit.isEmpty) {
       unit = item.itemUnit;
     }
 
@@ -93,8 +97,7 @@ class _ItemInfoPageState extends State<ItemInfoPage> {
           ),
         ).then((val) {
           {
-            if (val!)
-            {
+            if (val!) {
               String newName = nameController.text;
               String newCount = countController.text;
               String newInfo = infoController.text;
@@ -107,7 +110,14 @@ class _ItemInfoPageState extends State<ItemInfoPage> {
                   itemBarcode: item.itemBarcode,
                   isChecked: item.isChecked,
                   listID: item.listID);
-              ItemModel oldItemModel = ItemModel(itemName: item.itemName, itemCount: item.itemCount, itemUnit: _oldItem!.itemUnit, itemBarcode: item.itemBarcode, isChecked: item.isChecked, itemInfo: item.itemInfo, listID: item.listID);
+              ItemModel oldItemModel = ItemModel(
+                  itemName: item.itemName,
+                  itemCount: item.itemCount,
+                  itemUnit: _oldItem!.itemUnit,
+                  itemBarcode: item.itemBarcode,
+                  isChecked: item.isChecked,
+                  itemInfo: item.itemInfo,
+                  listID: item.listID);
               DatabaseService(uid: AuthService().uid)
                   .replaceItem(oldItemModel, newItem);
             }
@@ -127,7 +137,7 @@ class _ItemInfoPageState extends State<ItemInfoPage> {
             Padding(
                 padding: const EdgeInsets.only(right: 20.0),
                 child: GestureDetector(
-                  onTap: ()  {
+                  onTap: () {
                     showDialog<bool>(
                       context: context,
                       builder: (BuildContext context) => AlertDialog(
@@ -150,7 +160,8 @@ class _ItemInfoPageState extends State<ItemInfoPage> {
                     ).then((val) {
                       {
                         if (val!) {
-                          DatabaseService(uid: AuthService().uid).deleteItemFromList(widget.itemModel);
+                          DatabaseService(uid: AuthService().uid)
+                              .deleteItemFromList(widget.itemModel);
                           Navigator.pop(context);
                         }
                       }
@@ -172,9 +183,9 @@ class _ItemInfoPageState extends State<ItemInfoPage> {
                     const Text("Nazwa:"),
                     Expanded(
                         child: TextField(
-                          textAlign: TextAlign.center,
-                          controller: nameController,
-                        )),
+                      textAlign: TextAlign.center,
+                      controller: nameController,
+                    )),
                   ],
                 ),
                 Row(
@@ -184,26 +195,27 @@ class _ItemInfoPageState extends State<ItemInfoPage> {
                     const Text("Ilość:"),
                     Expanded(
                         child: TextField(
-                          textAlign: TextAlign.center,
-                          controller: countController,
-                          keyboardType: TextInputType.number,
-                          inputFormatters: <TextInputFormatter>[
-                            FilteringTextInputFormatter.allow(RegExp(r"[0-9.]")),
-                            TextInputFormatter.withFunction((oldValue, newValue) {
-                              try {
-                                final text = newValue.text;
-                                if (text.isNotEmpty) double.parse(text);
-                                return newValue;
-                              } catch (e) {
-                                //do nothing
-                              }
-                              return oldValue;
-                            }),
-                          ],
-                        )),
+                      textAlign: TextAlign.center,
+                      controller: countController,
+                      keyboardType: TextInputType.number,
+                      inputFormatters: <TextInputFormatter>[
+                        FilteringTextInputFormatter.allow(RegExp(r"[0-9.]")),
+                        TextInputFormatter.withFunction((oldValue, newValue) {
+                          try {
+                            final text = newValue.text;
+                            if (text.isNotEmpty) double.parse(text);
+                            return newValue;
+                          } catch (e) {
+                            //do nothing
+                          }
+                          return oldValue;
+                        }),
+                      ],
+                    )),
                     DropdownButton<String>(
                         value: unit,
-                        items: units.map<DropdownMenuItem<String>>((String val) {
+                        items:
+                            units.map<DropdownMenuItem<String>>((String val) {
                           return DropdownMenuItem<String>(
                             value: val,
                             child: Text(val),
@@ -221,7 +233,8 @@ class _ItemInfoPageState extends State<ItemInfoPage> {
                   textAlign: TextAlign.center,
                   controller: infoController,
                   keyboardType: TextInputType.multiline,
-                  minLines: 1, //Normal textInputField will be displayed
+                  minLines: 1,
+                  //Normal textInputField will be displayed
                   maxLines: 5, // when user presses enter it will adapt to it
                 ),
                 const Text('Kod kreskowy:'),
@@ -229,29 +242,31 @@ class _ItemInfoPageState extends State<ItemInfoPage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    OutlinedButton(onPressed: () async{
-                      await _scan();
-                      if(_barcodeLastResult != "-1")
-                        {
-                          setState(() {
-                            item.itemBarcode = _barcode;
-                          });
-                          DatabaseService(uid: AuthService().uid)
-                              .replaceItem(_oldItem!, item);
+                    OutlinedButton(
+                        onPressed: () async {
+                          await _scan();
+                          if (_barcodeLastResult != "-1") {
+                            setState(() {
+                              item.itemBarcode = _barcode;
+                            });
+                            DatabaseService(uid: AuthService().uid)
+                                .replaceItem(_oldItem!, item);
                             _oldItem!.itemBarcode = _barcode;
-                        }
-                    }, child: item.itemBarcode.isEmpty ? const Text('Dodaj kod kreskowy') : const Text('Zmień kod kreskowy')),
-                    OutlinedButton(onPressed: () async {
-                      await _scan();
-                      if (_barcodeLastResult != "-1") {
-                        if (_barcode == item.itemBarcode) {
-                          showDialog<String>(
-                            context: context,
-                            builder: (BuildContext context) =>
-                                AlertDialog(
+                          }
+                        },
+                        child: item.itemBarcode.isEmpty
+                            ? const Text('Dodaj kod kreskowy')
+                            : const Text('Zmień kod kreskowy')),
+                    OutlinedButton(
+                        onPressed: () async {
+                          await _scan();
+                          if (_barcodeLastResult != "-1") {
+                            if (_barcode == item.itemBarcode) {
+                              showDialog<String>(
+                                context: context,
+                                builder: (BuildContext context) => AlertDialog(
                                   title: const Text('Wynik skanowania'),
-                                  content: const Text(
-                                      'Ten sam produkt!'),
+                                  content: const Text('Ten sam produkt!'),
                                   actions: [
                                     TextButton(
                                       onPressed: () =>
@@ -260,16 +275,13 @@ class _ItemInfoPageState extends State<ItemInfoPage> {
                                     ),
                                   ],
                                 ),
-                          );
-                        }
-                        else {
-                          showDialog<String>(
-                            context: context,
-                            builder: (BuildContext context) =>
-                                AlertDialog(
+                              );
+                            } else {
+                              showDialog<String>(
+                                context: context,
+                                builder: (BuildContext context) => AlertDialog(
                                   title: const Text('Wynik skanowania'),
-                                  content: const Text(
-                                      'Inny produkt!'),
+                                  content: const Text('Inny produkt!'),
                                   actions: [
                                     TextButton(
                                       onPressed: () =>
@@ -278,10 +290,11 @@ class _ItemInfoPageState extends State<ItemInfoPage> {
                                     ),
                                   ],
                                 ),
-                          );
-                        }
-                      }
-                    }, child: const Text('Sprawdź kod kreskowy')),
+                              );
+                            }
+                          }
+                        },
+                        child: const Text('Sprawdź kod kreskowy')),
                   ],
                 ),
               ],
