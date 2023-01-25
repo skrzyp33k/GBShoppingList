@@ -245,7 +245,7 @@ class _ItemInfoPageState extends State<ItemInfoPage> {
                   barcode: Barcode.ean13(drawEndChar: true),
                   data: item.itemBarcode,
                   color: GbPalette.yellow,
-                  errorBuilder: (context, error) => Center(child: Text("Dodaj kod kreskowy aby się tutaj pojawił")),
+                  errorBuilder: (context, error) => const Center(child: Text("Dodaj kod kreskowy aby się tutaj pojawił")),
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
