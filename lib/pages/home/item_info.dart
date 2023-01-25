@@ -2,9 +2,11 @@ import 'package:barcode_scan2/barcode_scan2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gb_shopping_list/models/item.dart';
+import 'package:gb_shopping_list/props/palette.dart';
 import 'package:gb_shopping_list/props/units.dart';
 import 'package:gb_shopping_list/services/auth.dart';
 import 'package:gb_shopping_list/services/database.dart';
+import 'package:barcode_widget/barcode_widget.dart';
 
 class ItemInfoPage extends StatefulWidget {
   const ItemInfoPage({Key? key, required this.itemModel}) : super(key: key);
@@ -128,6 +130,7 @@ class _ItemInfoPageState extends State<ItemInfoPage> {
         return false;
       },
       child: Scaffold(
+        resizeToAvoidBottomInset : false,
         appBar: AppBar(
           title: Text(item.itemName),
           foregroundColor: Theme.of(context).colorScheme.tertiary,
@@ -238,7 +241,12 @@ class _ItemInfoPageState extends State<ItemInfoPage> {
                   maxLines: 5, // when user presses enter it will adapt to it
                 ),
                 const Text('Kod kreskowy:'),
-                Text(item.itemBarcode),
+                BarcodeWidget(
+                  barcode: Barcode.ean13(drawEndChar: true),
+                  data: item.itemBarcode,
+                  color: GbPalette.yellow,
+                  errorBuilder: (context, error) => Center(child: Text("Dodaj kod kreskowy aby się tutaj pojawił")),
+                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
