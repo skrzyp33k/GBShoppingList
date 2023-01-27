@@ -34,6 +34,7 @@ class GBSLApp extends StatelessWidget {
         child: MaterialApp(
             title: 'GB Shopping List',
             theme: ThemeData(
+              useMaterial3: true,
               colorScheme: const ColorScheme.light().copyWith(
                 primary: GbPalette.yellow,
                 secondary: GbPalette.yellow,
